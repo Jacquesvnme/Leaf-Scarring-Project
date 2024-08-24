@@ -35,10 +35,17 @@ Items below are found in the `depreciated` folder, and are currently not being u
 
 ## Images
 
-<img src="./images/img.jpg" alt="" height="350px" width="350px">
-<img src="./images/img_foreground.png" alt="" height="350px" width="350px">
-<img src="./images/img_edge.png" alt="" height="350px" width="350px">
-<img src="./images/img_contours.png" alt="" height="350px" width="350px">
+#### Img.jpg
+<img src="./images/img.jpg" alt="" height="350px" width="350px"> <br>
+
+#### Foreground.png
+<img src="./images/img_foreground.png" alt="" height="350px" width="350px"> <br>
+
+#### Edge.png
+<img src="./images/img_edge.png" alt="" height="350px" width="350px"> <br>
+
+#### Contours.png
+<img src="./images/img_contours.png" alt="" height="350px" width="350px"> <br>
 
 ## Important Links
 
