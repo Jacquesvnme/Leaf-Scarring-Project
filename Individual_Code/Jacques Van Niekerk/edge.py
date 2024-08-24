@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Read image from disk.
-img = cv2.imread('image.jpg')
+img = cv2.imread('img_foreground.png')
 # Convert BGR image to RGB
 image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 

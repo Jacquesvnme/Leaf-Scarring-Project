@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 
 # Reading image 
 font = cv2.FONT_HERSHEY_COMPLEX 
-img2 = cv2.imread('latest_img.png', cv2.IMREAD_COLOR) 
+img2 = cv2.imread('img_edge.png', cv2.IMREAD_COLOR) 
 
 # Reading same image in another  
 # variable and converting to gray scale. 
-img = cv2.imread('latest_img.png', cv2.IMREAD_GRAYSCALE) 
+img = cv2.imread('img_edge.png', cv2.IMREAD_GRAYSCALE) 
 
 # Converting image to a binary image 
 # ( black and white only image). 

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Reading the image using imread() function
-image = cv2.imread('image.jpg')
+image = cv2.imread('img.jpg')
 
 # Extracting the height and width of an image
 h, w = image.shape[:2]
