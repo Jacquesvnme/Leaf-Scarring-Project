@@ -63,22 +63,9 @@ while(1):
     #cv2.imshow('image', image) 
     #cv2.imshow('mask', mask) 
     #cv2.imshow('result', result) 
-    
-    (B, G, R) = image[320,0]
-    print(image[320,0])
-    print("R = {}, G = {}, B = {}".format(R, G, B))
-    
-    #B = image[100, 100, 0]
-    #print("B = {}".format(B))
-    
-    #for i in range(0,960,10):
-        #(B, G, R) = image[320,0]
-        #if image[320,i] != 0:
-            #print("pixel found")
-            #break
 
     resize_aspect = cv2.resize(result, dim)
-    #cv2.imshow("Resized Image", resize_aspect)
+    cv2.imshow("Resized Image", resize_aspect)
 
     cv2.waitKey(0) 
 
