@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 
 # path to input image specified and 
 # image is loaded with imread command
-image = cv2.imread('img.jpg')
+image = cv2.imread('images/img.jpg')
 
 # create a simple mask image similar
 # to the loaded image, with the 
