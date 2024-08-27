@@ -31,7 +31,7 @@ Items below are found in the `depreciated` folder, and are currently not being u
 | `x_edit_img` is an edited version of `img` <br> 1: Hand has been edited out because better pictures will be taken in the future where hand is not present anymore |
 | `x_planning.png` is not currently being used and is a part of `main.py` |
 | `x_main.py` is not currently being used |
-\ `filter_img.png` is the result gained from `main.py` |
+| `filter_img.png` is the result gained from `main.py` |
 
 ## Images
 
