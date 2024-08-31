@@ -53,19 +53,6 @@ Correct values still need to be calculated via the ratio
 For now the assumption is that 36pixels = 1cm
 All Realistic output values are calculated based in this assumption
 
-## Next Steps
-
-Identify separately the calibration cube
-This will probably be done using the same methods as seen sovar
-
-Use Main to filter color of calibration cube
-Thereafter use foreground then edge then contours to get ratio
-
-or
-
-Use foreground in combination with color of calibration cube to identify only cube
-then use edge & contours to get ratio
-
 ## Other
 
 Items below are found in the `depreciated` folder, and are currently not being used
@@ -115,3 +102,11 @@ Easy Markdown --> [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-she
 | Blurring | [GeeksforGeeks](https://www.geeksforgeeks.org/python-image-blurring-using-opencv/) |
 
 <center><img src="./images/gif_python.gif" alt="python gif" height="200px" width="200px"></center>
+
+
+### New files
+
+`x_draw.py`
+`img_with_calibration_cube.png`
+`img_filter.jpg`
+`final_main.py`

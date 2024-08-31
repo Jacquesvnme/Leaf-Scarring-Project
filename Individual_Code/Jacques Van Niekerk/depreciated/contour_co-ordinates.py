@@ -25,6 +25,7 @@ contours, _= cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 coordinateListY = []
 coordinateListX = []
+
 print("----------------------------------")
 print("Outline's Co-ordinates:")
 print("X  |  Y")
