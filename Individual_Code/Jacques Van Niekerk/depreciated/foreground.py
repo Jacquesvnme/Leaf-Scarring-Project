@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-image = cv2.imread('./images/img_with_calibration_cube.png')
+image = cv2.imread('./images/data.jpg')
 l, w = image.shape[:2]
 mask = np.zeros(image.shape[:2], np.uint8)
 

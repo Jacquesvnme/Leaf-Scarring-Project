@@ -1,5 +1,13 @@
 # Current Code
 
+# Code is broken
+
+For unknown reasons this code is now broken
+Something to do with open cv import at top
+Don't try to use this code
+
+Will fix code later on
+
 ## Basic Info
 
 All images are found in the `images` folder

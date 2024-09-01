@@ -1,32 +1,33 @@
-import numpy as np
 import cv2
+import numpy as np
 from matplotlib import pyplot as plt
 import math
 
 # CALIBRATION CUBE RATIO
 
-image = cv2.imread('./images/img_with_calibration_cube.png')
+image = cv2.imread('./images/data.png')
 
 h, w = image.shape[:2]
 print("Height = {}, Width = {}".format(h, w))
-ratio = 800 / w
-dim = (800, int(h * ratio)) 
+#ratio = 800 / w
+#dim = (800, int(h * ratio)) 
+
+#lower_red = np.array([255, 98, 98]) #darker color
+#upper_red = np.array([255, 171, 171]) #brigther color
 
 hsv = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR) 
-lower_green = np.array([255, 255, 255])
-upper_green = np.array([255, 255, 255]) 
-mask = cv2.inRange(hsv, lower_green, upper_green) 
+lower_red = np.array([255, 0, 0])
+upper_red = np.array([150, 0, 0]) 
+mask = cv2.inRange(hsv, lower_red, upper_red) 
 Gaussian = cv2.GaussianBlur(image, (7, 7), 0) 
 result = cv2.bitwise_and(Gaussian, Gaussian, mask = mask) 
 
-color = (0,0,255)
-thickness = 10
-
-resize_aspect = cv2.resize(result, dim)
-#cv2.imshow("Resized Image", resize_aspect)
+#resize_aspect = cv2.resize(result, dim)
+cv2.imshow("Resized Image", result)
+cv2.waitKey(0)
 
 #filename = 'savedImage.jpg'
-cv2.imwrite("./images/new_img_filter.jpg", resize_aspect)
+cv2.imwrite("./images/new_img_filter.jpg", result)
 
 
 font = cv2.FONT_HERSHEY_COMPLEX 
