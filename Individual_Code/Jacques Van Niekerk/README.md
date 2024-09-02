@@ -1,6 +1,6 @@
 # Current Code
 
-# Code is broken
+## Notice: Code is broken
 
 For unknown reasons this code is now broken
 Something to do with open cv import at top
@@ -89,6 +89,9 @@ Items below are found in the `depreciated` folder, and are currently not being u
 
 #### Console_Line_Output.png
 <img src="./images/img_console_line_output.png" alt=""> <br>
+
+#### New_Final_Image.png
+<img src="./images/new_img_final.png" alt=""> <br>
 
 ## Important Links
 
