@@ -250,7 +250,7 @@ def final_data(path):
 
 
 path = './images/data1.png'
-#path = './images/data3.jpg'
+#path = './images/data2.jpg'
 final_data(path)
 
 file.close()
