@@ -5,10 +5,10 @@
 - Latest is the current code
 - Depreciated is old code that is not being use anymore
 
-Code is in a file called `File.py`
+Code is in a file called `File.py` <br>
 Will later on create a JupiterNotebook file once I understand how it works
 
-Please also check the outputs images of the program below
+Please also check the outputs images of the program below <br>
 As well as the text file called `output.txt` at `./latest/images/results/output.txt`
 
 ## Images
