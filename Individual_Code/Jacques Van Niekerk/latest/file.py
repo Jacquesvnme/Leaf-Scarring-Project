@@ -105,7 +105,10 @@ def main_edge_analysis(path):
     check = cv2.imwrite("./images/results/edge.png", edges)
     return
 
+
+
 def main_coordinates():
+    
     main_edge_analysis(path)
 
     font = cv2.FONT_HERSHEY_COMPLEX 
