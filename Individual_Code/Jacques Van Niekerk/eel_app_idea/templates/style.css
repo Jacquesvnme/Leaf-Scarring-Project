@@ -1,0 +1,11 @@
+@font-face{
+    font-family: "Maximum_Profit";
+    src: url(./Maximum-Profit.ttf);
+}
+
+body{
+    background-color: black;
+    color: white;
+    font-family: "Maximum_Profit";
+    font-size: 30px;
+}
