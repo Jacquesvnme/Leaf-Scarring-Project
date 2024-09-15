@@ -93,8 +93,23 @@ def calibration_cube_coordinates():
 
 
 
-def main_edge_analysis(path):
-    img = cv2.imread(path)
+def leaf_filter(path):
+    image = cv2.imread(path)
+    
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([35, 40, 40])
+    upper_green = np.array([85, 255, 255])
+    mask = cv2.inRange(hsv, lower_green, upper_green) 
+    
+    filter_result = cv2.bitwise_and(image, image, mask = mask) 
+
+    check = cv2.imwrite("./images/results/filter_result.png", filter_result)
+
+
+def main_edge_analysis():
+    leaf_filter(path)
+    
+    img = cv2.imread("./images/results/filter_result.png")
 
     image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
@@ -109,7 +124,7 @@ def main_edge_analysis(path):
 
 def main_coordinates():
     
-    main_edge_analysis(path)
+    main_edge_analysis()
 
     font = cv2.FONT_HERSHEY_COMPLEX 
     img2 = cv2.imread('./images/results/edge.png', cv2.IMREAD_COLOR) 
