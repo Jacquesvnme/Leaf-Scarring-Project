@@ -82,7 +82,7 @@ def calibration_cube_coordinates():
     width_cube = top_cube - bottom_cube
     length_cube = right_cube - left_cube
     ratio = math.ceil( (width_cube + length_cube) / 2 )
-    
+
     print("==============================================")
     print("CALIBRATION CUBE DETAILS\n")
     print("Length: " + str(length_cube) + " px")
@@ -210,7 +210,7 @@ def main_coordinates():
     img2 = cv2.putText(img2, "Area: {}".format(round(width_of_object*length_of_object,2)), org, font, fontScale, color, thickness, cv2.LINE_AA)
     
     check = cv2.imwrite("./images/results/final.png", img2)
- 
+
     cv2.imshow('img2', img2)  
 
     if cv2.waitKey(0) & 0xFF == ord('q'):  
@@ -267,14 +267,13 @@ def final_data(path):
     return
 
 
-path = './images/data1.png'
-#path = './images/data2.jpg'
+#path = './images/data1.png'
+path = './images/data2.jpg'
 final_data(path)
 
 file.close()
 sys.stdout = stdout
 print("Output Data found in text file at ./images/results/")
 
-#TODO fix lenght & width at main_coordinates 
-#! Length & width are calculated with calibration cube included
-#! This should not happen
+#TODO fix output for calibration cube details on output file
+#! output data gets printed twice as ratio is gained on two separate times
