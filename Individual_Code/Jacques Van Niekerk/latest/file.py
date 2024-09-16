@@ -166,7 +166,7 @@ def main_coordinates():
     left = coordinateListX[0]
     right = coordinateListX[len(coordinateListX)-1]
 
-    ratio = 43
+    ratio = calibration_cube_coordinates()
 
     pixel_width = (top - bottom)
     pixel_length = (right - left)

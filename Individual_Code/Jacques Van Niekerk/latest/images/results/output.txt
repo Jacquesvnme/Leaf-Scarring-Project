@@ -5,6 +5,12 @@ Length: 39 px
 Width: 42 px
 Ratio: 41 (amount of pixel = 2cm)
 ==============================================
+CALIBRATION CUBE DETAILS
+
+Length: 39 px
+Width: 42 px
+Ratio: 41 (amount of pixel = 2cm)
+==============================================
 LENGTH & WIDTH RESULTS
 
 These results are for the object in
@@ -12,8 +18,8 @@ question (the Leaf)
 ----------------------------------------------
 Pixel Length: 192 px
 Pixel Width: 282 px
-Length: 8.9302 cm
-Width: 13.1163 cm
+Length: 9.3659 cm
+Width: 13.7561 cm
 ==============================================
 WHOLE IMAGE DETAILS
 
