@@ -15,27 +15,29 @@ sys.stdout = file
 def calibration_cube_filter(path):
     input_image = cv2.imread(path)
 
-    kernel = np.ones((9, 9), np.uint8) 
-    input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT) 
+    #kernel = np.ones((9, 9), np.uint8) 
+    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT) 
     
-    kernel = np.ones((6, 6), np.uint8) 
-    input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT) 
+    #kernel = np.ones((6, 6), np.uint8) 
+    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT) 
     #cv2.imshow("Erode", input_image) 
 
-    Gaussian = cv2.GaussianBlur(input_image, (9, 9), 0) 
-    #cv2.imshow('Gaussian Blurring', Gaussian) 
+    #input_image = cv2.GaussianBlur(input_image, (9, 9), 0) 
+    #cv2.imshow('Gaussian Blurring', input_image) 
 
-    hsv = cv2.cvtColor(Gaussian, cv2.COLOR_BGRA2BGR) 
-    lower_white = np.array([201, 191, 191]) 
-    upper_white = np.array([255, 255, 255]) 
-    mask = cv2.inRange(hsv, lower_white, upper_white) 
-    result = cv2.bitwise_and(Gaussian, Gaussian, mask = mask) 
+    hsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV) 
+    #lower_white = np.array([201, 191, 191]) 
+    #upper_white = np.array([255, 255, 255])
+    lower_white = np.array([0, 0, 200])
+    upper_white = np.array([180, 55, 255])
+    mask = cv2.inRange(hsv, lower_white, upper_white)
+    result = cv2.bitwise_and(input_image, input_image, mask = mask)
     
-    kernel = np.ones((9, 9), np.uint8) 
-    img_dilation = cv2.dilate(result, kernel, iterations=2) 
+    #kernel = np.ones((9, 9), np.uint8) 
+    #img_dilation = cv2.dilate(result, kernel, iterations=2) 
 
     #cv2.imshow("Calibration Cube Filter Image", img_dilation)
-    cv2.imwrite("./images/results/calibration_cube_filter.jpg", img_dilation)
+    cv2.imwrite("./images/results/calibration_cube_filter.jpg", result)
     return
 
 
@@ -185,7 +187,6 @@ def main_coordinates():
     print("Pixel Width: " + str(pixel_width) + " px")
     print("Length: " + str(length_of_object) + " cm")
     print("Width: " + str(width_of_object) + " cm")
-    #print("Area: " + round(width_of_object*length_of_object,2 + "cm^2"))
 
     start_point = (left, top)
     end_point = (right, bottom)
@@ -252,11 +253,10 @@ def final_data(path):
     print("Real Width: " + str(real_w) + " cm")
     print("Real Area: " + str(real_area) + " cm")
 
-    #kernel = np.ones((9, 9), np.uint8) 
-    #image = cv2.dilate(image, kernel, iterations=1) 
-
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    #cv2.imshow("Gray Filter",gray)
+    #kernel = np.ones((5, 5), np.uint8) #TODO here
+    #gray = cv2.dilate(gray, kernel, iterations=1) 
+    cv2.imwrite("./images/results/gray.png",gray)
     area = cv2.countNonZero(gray)
 
     taken_area = math.ceil( (area / (l*w))*100 )
@@ -296,9 +296,6 @@ data = "data5"
 if data == "data1":
     path = './images/data1.png' 
     inputData_r = 126.04
-elif data == "data4":
-    path = './images/data4.jpg' 
-    inputData_r = 126.04
 elif data == "data5":
     path = './images/data5.png'
     inputData_r = 170.97
@@ -311,8 +308,9 @@ elif data == "data7":
 elif data == "data8":
     path = './images/data8.png'
     inputData_r = 18.24
-
-
+elif data == "data9":
+    path = './images/data9.jpg'
+    inputData_r = 32
 
 final_data(path)
 
