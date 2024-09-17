@@ -19,3 +19,5 @@ try:
 except:
     #exception handling if using x to create file that doesn't exists
     print("Error in creating file.\nFile already exists")
+
+# Using Pandas might be better
