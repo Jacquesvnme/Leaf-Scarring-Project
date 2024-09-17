@@ -248,6 +248,9 @@ def final_data(path):
     print("Real Width: " + str(real_w) + " cm")
     print("Real Area: " + str(real_area) + " cm")
 
+    #kernel = np.ones((9, 9), np.uint8) 
+    #image = cv2.dilate(image, kernel, iterations=1) 
+
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     #cv2.imshow("Gray Filter",gray)
     area = cv2.countNonZero(gray)
@@ -264,14 +267,49 @@ def final_data(path):
     print("Area of Object (leaf): " + str(object_area) + " cm^2")
     print("----------------------------------------------")
 
+    acuTest(data, object_area, inputData_r)
+
     #cv2.imshow("Gray", gray)
     cv2.waitKey(0)
     return
 
 
-#path = './images/data1.png'
-path = './images/data6.png'
+
+def acuTest(data, object_area, inputData_r):
+    # Data measured by program
+    inputData_p = object_area 
+    data_Percentage = round(100 -  (inputData_p/inputData_r)*100,4)
+    
+    print("Real measured data: " + str(inputData_r) + " cm^2")
+    print("Data measured by program: " + str(inputData_p) + " cm^2")
+    print("Percentage of accuracy: " + str(data_Percentage) + " %")
+    print("----------------------------------------------")
+
+
+
+data = "data6"
+
+if data == "data1":
+    path = './images/data1.png' 
+    inputData_r = 126.04
+elif data == "data4":
+    path = './images/data4.jpg' 
+    inputData_r = 126.04
+elif data == "data4":
+    path = './images/data5.png'
+    inputData_r = 170.97
+elif data == "data6":
+    path = './images/data6.png'
+    inputData_r = 126.04
+elif data == "data7":
+    path = './images/data7.png'
+    inputData_r = 93.10
+elif data == "data8":
+    path = './images/data8.png'
+    inputData_r = 18.24
+
 final_data(path)
+
 
 file.close()
 sys.stdout = stdout

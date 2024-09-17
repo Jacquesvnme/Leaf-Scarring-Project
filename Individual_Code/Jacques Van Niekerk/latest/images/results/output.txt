@@ -45,7 +45,11 @@ OBJECT ONLY DETAILS
 Details here focuses only on the object
 identified. This would be the leaf
 ----------------------------------------------
-Area: 61559
-% Area of Leaf on image: 25 %
-Area of Object (leaf): 108.2319 cm^2
+Area: 65761
+% Area of Leaf on image: 27 %
+Area of Object (leaf): 116.8905 cm^2
+----------------------------------------------
+Real measured data: 126.04 cm^2
+Data measured by program: 116.8905 cm^2
+Percentage of accuracy: 7.2592 %
 ----------------------------------------------
