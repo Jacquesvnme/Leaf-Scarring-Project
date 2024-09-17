@@ -1,0 +1,10 @@
+#2a1c11 -- damage dark drown
+#a98d75 -- damage light brown
+#f0cd89 -- damage lighter drown
+#5c350e -- damage darkish brown
+#1a1e0f -- damage dead leaf
+
+#f2d309 -- unhealthy yellow
+#d28400 -- unhealthy orange
+
+#9b9c3e -- dying really unhealthy
