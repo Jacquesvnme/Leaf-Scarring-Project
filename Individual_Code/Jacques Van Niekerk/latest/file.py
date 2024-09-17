@@ -267,8 +267,8 @@ def final_data(path):
     return
 
 
-#path = './images/data1.png'
-path = './images/data2.jpg'
+path = './images/data1.png'
+#path = './images/data2.jpg'
 final_data(path)
 
 file.close()
