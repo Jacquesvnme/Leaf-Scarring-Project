@@ -181,6 +181,7 @@ def main_coordinates():
     print("Pixel Width: " + str(pixel_width) + " px")
     print("Length: " + str(length_of_object) + " cm")
     print("Width: " + str(width_of_object) + " cm")
+    #print("Area: " + round(width_of_object*length_of_object,2 + "cm^2"))
 
     start_point = (left, top)
     end_point = (right, bottom)
@@ -224,7 +225,7 @@ def final_data(path):
     calibration_cube_filter(path)
     ratio = calibration_cube_coordinates()
     main_coordinates()
-    image = cv2.imread(path)
+    image = cv2.imread("./images/results/filter_result.png") # TODO fix code here
     
     l, w = image.shape[:2]
 
@@ -248,6 +249,7 @@ def final_data(path):
     print("Real Area: " + str(real_area) + " cm")
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #cv2.imshow("Gray Filter",gray)
     area = cv2.countNonZero(gray)
 
     taken_area = math.ceil( (area / (l*w))*100 )
@@ -267,8 +269,8 @@ def final_data(path):
     return
 
 
-path = './images/data1.png'
-#path = './images/data2.jpg'
+#path = './images/data1.png'
+path = './images/data6.png'
 final_data(path)
 
 file.close()
