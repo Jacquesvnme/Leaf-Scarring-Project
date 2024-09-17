@@ -4,9 +4,13 @@ from matplotlib import pyplot as plt
 import math
 import sys
 
+
+
 stdout = sys.stdout
 file = open('./images/results/output.txt', 'w')
 sys.stdout = file
+
+
 
 def calibration_cube_filter(path):
     input_image = cv2.imread(path)
@@ -287,7 +291,7 @@ def acuTest(data, object_area, inputData_r):
 
 
 
-data = "data6"
+data = "data5"
 
 if data == "data1":
     path = './images/data1.png' 
@@ -295,7 +299,7 @@ if data == "data1":
 elif data == "data4":
     path = './images/data4.jpg' 
     inputData_r = 126.04
-elif data == "data4":
+elif data == "data5":
     path = './images/data5.png'
     inputData_r = 170.97
 elif data == "data6":
@@ -308,7 +312,10 @@ elif data == "data8":
     path = './images/data8.png'
     inputData_r = 18.24
 
+
+
 final_data(path)
+
 
 
 file.close()
