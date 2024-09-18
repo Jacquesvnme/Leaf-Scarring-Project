@@ -40,3 +40,32 @@
     bottom = coordinateListY[0]
     left = coordinateListX[0]
     right = coordinateListX[len(coordinateListX)-1]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    image = cv2.imread(path)
+    mask = np.zeros(image.shape[:2], np.uint8)
+    backgroundModel = np.zeros((1, 65), np.float64)
+    foregroundModel = np.zeros((1, 65), np.float64)
+    rectangle = (1, 1, int(w), int(h))
+    cv2.grabCut(image, mask, rectangle, backgroundModel, foregroundModel, 3, cv2.GC_INIT_WITH_RECT)
+    mask2 = np.where((mask == 2)|(mask == 0), 0, 1).astype('uint8')
+    image_segmented = image * mask2[:, :, np.newaxis]
+    cv2.imshow("Result", image_segmented)
+    cv2.imwrite("./result.png", image_segmented)

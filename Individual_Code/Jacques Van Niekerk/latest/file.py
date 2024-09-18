@@ -15,35 +15,29 @@ sys.stdout = file
 def calibration_cube_filter(path):
     input_image = cv2.imread(path)
     
-    #kernel = np.ones((9, 9), np.uint8) 
-    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT)
+    #input_image = cv2.GaussianBlur(input_image, (9, 9), 0) 
     
-    #kernel = np.ones((9, 9), np.uint8) 
-    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT)
-    #cv2.imshow("Kernel", input_image)
+    #kernel = np.ones((9, 9), np.uint8)
+    #input_image = cv2.erode(input_image, kernel, iterations=1) 
+    #cv2.imshow("Dilation", input_image)
     
-    input_image = cv2.GaussianBlur(input_image, (9, 9), 0) 
-    cv2.imshow('Gaussian Blurring', input_image)
-
-    #input_image = cv2.bilateralFilter(input_image, 9, 75, 75) 
-    #cv2.imshow('Bilateral Blurring', input_image) 
-
     hsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV) 
-    #lower_white = np.array([201, 191, 191]) 
-    #upper_white = np.array([255, 255, 255])
-    lower_white = np.array([0, 0, 0])
-    upper_white = np.array([0, 0, 255])
+
+    sensitivity = 10
+    lower_white = np.array([0,0,100-sensitivity])
+    upper_white = np.array([0,sensitivity,255])
+    
     mask = cv2.inRange(hsv, lower_white, upper_white)
-    result = cv2.bitwise_and(input_image, input_image, mask = mask)
-    
+    input_image = cv2.bitwise_and(input_image, input_image, mask = mask)
 
-    
-    #kernel = np.ones((9, 9), np.uint8) 
-    #input_image = cv2.dilate(result, kernel, iterations=2) 
-    #cv2.imshow("Kernel", input_image)
+    #input_image = cv2.dilate(input_image, kernel, iterations=6)
+    #cv2.imshow("Dilation", input_image)
 
-    cv2.imshow("Calibration Cube Filter Image", result)
-    cv2.imwrite("./images/results/calibration_cube_filter.jpg", result)
+    cv2.imshow("Calibration Cube Filter Image", input_image)
+    cv2.imwrite("./images/results/calibration_cube_filter.jpg", input_image)
+
+    cv2.waitKey(0) 
+
     return
 
 
@@ -298,7 +292,7 @@ def acuTest(data, object_area, inputData_r):
 
 
 
-data = "data2"
+data = "data1"
 
 if data == "data1":
     path = './images/data1.png' 
