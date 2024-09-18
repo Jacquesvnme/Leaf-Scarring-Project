@@ -1,15 +1,15 @@
 ==============================================
 CALIBRATION CUBE DETAILS
 
-Length: 47 px
-Width: 51 px
-Ratio: 49 (amount of pixel = 2cm)
+Length: 48 px
+Width: 53 px
+Ratio: 51 (amount of pixel = 2cm)
 ==============================================
 CALIBRATION CUBE DETAILS
 
-Length: 47 px
-Width: 51 px
-Ratio: 49 (amount of pixel = 2cm)
+Length: 48 px
+Width: 53 px
+Ratio: 51 (amount of pixel = 2cm)
 ==============================================
 LENGTH & WIDTH RESULTS
 
@@ -18,8 +18,8 @@ question (the Leaf)
 ----------------------------------------------
 Pixel Length: 290 px
 Pixel Width: 314 px
-Length: 11.8367 cm
-Width: 12.8163 cm
+Length: 11.3725 cm
+Width: 12.3137 cm
 ==============================================
 WHOLE IMAGE DETAILS
 
@@ -36,20 +36,20 @@ Pixel Length: 617 px
 Pixel Width: 404 px
 Pixel area: 249268 px
 ----------------------------------------------
-Real length: 25.1837 cm
-Real Width: 16.4898 cm
-Real Area: 415.2742 cm
+Real length: 24.1961 cm
+Real Width: 15.8431 cm
+Real Area: 383.3412 cm
 ==============================================
 OBJECT ONLY DETAILS
 
 Details here focuses only on the object
 identified. This would be the leaf
 ----------------------------------------------
-Area: 88250
-% Area of Leaf on image: 36 %
-Area of Object (leaf): 149.4987 cm^2
+Area: 93266
+% Area of Leaf on image: 38 %
+Area of Object (leaf): 145.6697 cm^2
 ----------------------------------------------
 Real measured data: 170.97 cm^2
-Data measured by program: 149.4987 cm^2
-Percentage of accuracy: 12.5585 %
+Data measured by program: 145.6697 cm^2
+Percentage of accuracy: 14.7981 %
 ----------------------------------------------

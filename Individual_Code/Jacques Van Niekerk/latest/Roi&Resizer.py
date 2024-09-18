@@ -125,6 +125,27 @@ def roi(path):
     print("Left Value: " + str(left_roi))
     print("Right Value: " + str(right_roi))
 
+    mask = np.zeros(roi.shape[:2], np.uint8)
+    backgroundModel = np.zeros((1, 65), np.float64)
+    foregroundModel = np.zeros((1, 65), np.float64)
+    # (startingPoint_x, startingPoint_y, width, height)
+    rectangle = (left_roi-150, top_roi-150, roi_width+300, roi_height+300)
+    cv2.grabCut(roi, mask, rectangle, backgroundModel, foregroundModel, 3, cv2.GC_INIT_WITH_RECT)
+    mask2 = np.where((mask == 2)|(mask == 0), 0, 1).astype('uint8')
+    image_segmented = roi * mask2[:, :, np.newaxis]
+
+    plt.subplot(1, 2, 1)
+    plt.title('Original Image')
+    plt.imshow(cv2.cvtColor(roi, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+
+    plt.subplot(1, 2, 2)
+    plt.title('Segmented Image')
+    plt.imshow(cv2.cvtColor(image_segmented, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    
+    plt.show()
+
     # start_point | end_point | color | thickness
     roi = cv2.rectangle(roi, (left_roi, top_roi), (right_roi, bottom_roi), (0, 0, 255), 10)
 
