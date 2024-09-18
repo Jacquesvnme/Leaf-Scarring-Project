@@ -14,29 +14,35 @@ sys.stdout = file
 
 def calibration_cube_filter(path):
     input_image = cv2.imread(path)
-
-    #kernel = np.ones((9, 9), np.uint8) 
-    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT) 
     
-    #kernel = np.ones((6, 6), np.uint8) 
-    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT) 
-    #cv2.imshow("Erode", input_image) 
+    #kernel = np.ones((9, 9), np.uint8) 
+    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT)
+    
+    #kernel = np.ones((9, 9), np.uint8) 
+    #input_image = cv2.erode(input_image, kernel, cv2.BORDER_REFLECT)
+    #cv2.imshow("Kernel", input_image)
+    
+    input_image = cv2.GaussianBlur(input_image, (9, 9), 0) 
+    cv2.imshow('Gaussian Blurring', input_image)
 
-    #input_image = cv2.GaussianBlur(input_image, (9, 9), 0) 
-    #cv2.imshow('Gaussian Blurring', input_image) 
+    #input_image = cv2.bilateralFilter(input_image, 9, 75, 75) 
+    #cv2.imshow('Bilateral Blurring', input_image) 
 
     hsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV) 
     #lower_white = np.array([201, 191, 191]) 
     #upper_white = np.array([255, 255, 255])
-    lower_white = np.array([0, 0, 200])
-    upper_white = np.array([180, 55, 255])
+    lower_white = np.array([0, 0, 0])
+    upper_white = np.array([0, 0, 255])
     mask = cv2.inRange(hsv, lower_white, upper_white)
     result = cv2.bitwise_and(input_image, input_image, mask = mask)
     
-    #kernel = np.ones((9, 9), np.uint8) 
-    #img_dilation = cv2.dilate(result, kernel, iterations=2) 
 
-    #cv2.imshow("Calibration Cube Filter Image", img_dilation)
+    
+    #kernel = np.ones((9, 9), np.uint8) 
+    #input_image = cv2.dilate(result, kernel, iterations=2) 
+    #cv2.imshow("Kernel", input_image)
+
+    cv2.imshow("Calibration Cube Filter Image", result)
     cv2.imwrite("./images/results/calibration_cube_filter.jpg", result)
     return
 
@@ -254,8 +260,9 @@ def final_data(path):
     print("Real Area: " + str(real_area) + " cm")
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    #kernel = np.ones((5, 5), np.uint8) #TODO here
+    #kernel = np.ones((9, 9), np.uint8) #TODO here
     #gray = cv2.dilate(gray, kernel, iterations=1) 
+
     cv2.imwrite("./images/results/gray.png",gray)
     area = cv2.countNonZero(gray)
 
@@ -291,11 +298,14 @@ def acuTest(data, object_area, inputData_r):
 
 
 
-data = "data5"
+data = "data2"
 
 if data == "data1":
     path = './images/data1.png' 
     inputData_r = 126.04
+elif data == "data2":
+    path = './images/data2.jpg'
+    inputData_r = 2000
 elif data == "data5":
     path = './images/data5.png'
     inputData_r = 170.97
