@@ -15,34 +15,40 @@ sys.stdout = file
 def calibration_cube_filter(path):
     input_image = cv2.imread(path)
     
-    #input_image = cv2.GaussianBlur(input_image, (9, 9), 0) 
-    
-    #kernel = np.ones((9, 9), np.uint8)
-    #input_image = cv2.erode(input_image, kernel, iterations=1) 
-    #cv2.imshow("Dilation", input_image)
-    
     hsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV) 
 
-    sensitivity = 10
-    lower_white = np.array([0,0,100-sensitivity])
-    upper_white = np.array([0,sensitivity,255])
+    #sensitivity = 10
+    #lower_white = np.array([0,0,100-sensitivity])
+    #upper_white = np.array([0,sensitivity,255])
+    lower_red = np.array([0,50,50]) #example value
+    upper_red = np.array([10,255,255]) #example value
     
-    mask = cv2.inRange(hsv, lower_white, upper_white)
+    mask = cv2.inRange(hsv, lower_red, upper_red)
     input_image = cv2.bitwise_and(input_image, input_image, mask = mask)
 
-    #input_image = cv2.dilate(input_image, kernel, iterations=6)
-    #cv2.imshow("Dilation", input_image)
-
-    cv2.imshow("Calibration Cube Filter Image", input_image)
+    #cv2.imshow("Calibration Cube Filter Image", input_image)
     cv2.imwrite("./images/results/calibration_cube_filter.jpg", input_image)
-
-    cv2.waitKey(0) 
+    
+    calibration_cube_edge()
 
     return
 
 
 
+def calibration_cube_edge():
+    img = cv2.imread('./images/results/calibration_cube_filter.jpg')
+    image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    edges = cv2.Canny(image= image_rgb, threshold1=100, threshold2=700)
+    cv2.imshow("Edge", edges)
+    cv2.imwrite("./images/results/calibration_cube_filter.jpg", edges)
+    
+    cv2.waitKey(0)
+
+
+
 def calibration_cube_coordinates():
+    
     font = cv2.FONT_HERSHEY_COMPLEX 
     img2 = cv2.imread('./images/results/calibration_cube_filter.jpg', cv2.IMREAD_COLOR) 
     img = cv2.imread('./images/results/calibration_cube_filter.jpg', cv2.IMREAD_GRAYSCALE) 
@@ -51,7 +57,7 @@ def calibration_cube_coordinates():
 
     coordinateListY_cube = []
     coordinateListX_cube = []
-
+    
     for cnt in contours : 
         approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt, True), True) 
         cv2.drawContours(img2, [approx], 0, (0, 0, 255), 5)  
@@ -253,9 +259,10 @@ def final_data(path):
     print("Real Width: " + str(real_w) + " cm")
     print("Real Area: " + str(real_area) + " cm")
 
+    image = cv2.GaussianBlur(image, (9, 9), 0) 
+    cv2.imshow('Gaussian Blurring', image)
+
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    #kernel = np.ones((9, 9), np.uint8) #TODO here
-    #gray = cv2.dilate(gray, kernel, iterations=1) 
 
     cv2.imwrite("./images/results/gray.png",gray)
     area = cv2.countNonZero(gray)
@@ -292,7 +299,7 @@ def acuTest(data, object_area, inputData_r):
 
 
 
-data = "data1"
+data = "data6"
 
 if data == "data1":
     path = './images/data1.png' 
@@ -300,6 +307,9 @@ if data == "data1":
 elif data == "data2":
     path = './images/data2.jpg'
     inputData_r = 2000
+elif data == "data3":
+    path = './images/data3.jpg'
+    inputData_r = 126.04
 elif data == "data5":
     path = './images/data5.png'
     inputData_r = 170.97
