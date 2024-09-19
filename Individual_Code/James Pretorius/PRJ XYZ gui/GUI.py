@@ -65,7 +65,7 @@ class MainPage(QWidget):
             }
         """)
         
-        # New Sample Button
+        #NEW SAMPLE BUTTON
         self.new_sample_button = QPushButton('New Sample', self)
         self.new_sample_button.setFont(QFont('Inter', 35))
         self.new_sample_button.setGeometry(250, 350, 300, 100)
@@ -81,7 +81,7 @@ class MainPage(QWidget):
             }
         """)
 
-        # Data Review Button
+        #DATA REVIEW BUTTON
         self.data_review_button = QPushButton('Data Review', self)
         self.data_review_button.setFont(QFont('Inter', 35))
         self.data_review_button.setGeometry(700, 350, 300, 100)
@@ -97,7 +97,7 @@ class MainPage(QWidget):
             }
         """)
 
-        # Instructions Button
+        #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
         self.instructions_button.setGeometry(1210, 20, 50, 50)
         self.instructions_button.setStyleSheet("""
@@ -111,12 +111,12 @@ class MainPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/book_icon.png")  # Replace with the actual path to the home_icon image
+        icon = QIcon("./Images/book_icon.png")
         self.instructions_button.setIcon(icon)
         self.instructions_button.setIconSize(QSize(44,44))
         self.instructions_button.clicked.connect(self.show_instructions)
 
-        # Credits Label
+        #CREDITS SECTION
         self.credit_label = QLabel(self)
         self.credit_label.setText(
             "Credits:\n"
@@ -150,7 +150,8 @@ class MainPage(QWidget):
         palette.setBrush(QPalette.Background, QBrush(scaled_background))
         self.setAutoFillBackground(True)
         self.setPalette(palette)
-        
+
+    #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
             "Instructions for Using the Application:\n\n"
@@ -197,7 +198,7 @@ class NewSamplePage(QWidget):
             }
         """)
 
-        # Add Images Button
+        #ADD IMAGE BUTTON
         self.add_image_button = QPushButton('Add Images', self)
         self.add_image_button.setFont(QFont('Inter', 20))
         self.add_image_button.setGeometry(20, 680, 720, 60)
@@ -211,7 +212,7 @@ class NewSamplePage(QWidget):
         """)
         self.add_image_button.clicked.connect(self.open_image_dialog)
 
-        # Checklist, Location, and Date input (Right side layout)
+        #DATA INPUT SECTION
         self.dataInput_label = QLabel(self)
         self.dataInput_label.setGeometry(800, 90, 460, 570)
         self.dataInput_label.setAlignment(Qt.AlignLeft)        
@@ -277,8 +278,7 @@ class NewSamplePage(QWidget):
             }
         """)
         
-        #CHECKLIST
-        
+        #CHECKLIST        
         def handle_checkbox_state(checkbox):
             if checkbox.isChecked():
                 print(f"{checkbox.text()} is checked")
@@ -317,7 +317,7 @@ class NewSamplePage(QWidget):
                 image: url(./Images/unchecked_box.png);
         """)
 
-        # Next Button
+        #NEXT BUTTON
         self.next_button = QPushButton('Next', self)
         self.next_button.setFont(QFont('Inter', 20))
         self.next_button.setGeometry(800, 680, 460, 60) 
@@ -330,7 +330,7 @@ class NewSamplePage(QWidget):
                 }                           
         """)
         
-        # Instructions Button
+        #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
         self.instructions_button.setGeometry(1210, 20, 50, 50)
         self.instructions_button.setStyleSheet("""
@@ -349,7 +349,7 @@ class NewSamplePage(QWidget):
         self.instructions_button.setIconSize(QSize(44, 44))
         self.instructions_button.clicked.connect(self.show_instructions)
         
-        # Home Button
+        #HOME BUTTON
         self.home_button = QPushButton(self)
         self.home_button.setGeometry(1150, 20, 50, 50)
         self.home_button.setStyleSheet("""
@@ -396,7 +396,8 @@ class NewSamplePage(QWidget):
             print(f"{checkbox.text()} is checked")
         else:
             print(f"{checkbox.text()} is unchecked")
-
+            
+    #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
             "Instructions for New Sample Page:\n\n"
@@ -407,6 +408,8 @@ class NewSamplePage(QWidget):
         )
         QMessageBox.information(self, "Instructions", instructions)
 
+#class DataReviewPage(QWidget):
+#class OutputPage(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
