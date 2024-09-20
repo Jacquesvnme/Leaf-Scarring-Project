@@ -108,9 +108,12 @@ def calibration_cube_coordinates():
 def leaf_filter(path):
     image = cv2.imread(path)
     
+    #kernel = np.ones((9, 9), np.uint8) 
+    #image = cv2.dilate(image, kernel, iterations=1)
+    
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     lower_green = np.array([35, 40, 40])
-    upper_green = np.array([85, 255, 255])
+    upper_green = np.array([140, 255, 255])
     mask = cv2.inRange(hsv, lower_green, upper_green) 
     
     filter_result = cv2.bitwise_and(image, image, mask = mask) 
@@ -299,7 +302,7 @@ def acuTest(data, object_area, inputData_r):
 
 
 
-data = "data6"
+data = "data2"
 
 if data == "data1":
     path = './images/data1.png' 
