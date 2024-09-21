@@ -137,8 +137,8 @@ class MainPage(QWidget):
         #CREDITS SECTION
         self.credit_label = QLabel(self)
         self.credit_label.setText(
-            "Credits:\n"
-            "Group names D Giovannoni - Project Supervisor\n"
+            "Credits:\n" # ! Made changes - Add group names to next line
+            "Group names\nD Giovannoni - Project Supervisor\n" # ! Group Names still need to be added - James Pretorius 577814 | Jacques Van Niekerk 577343 | Hrudhay Reddy 577833 | Jan-Albert Mentz 577118 | Henko Holl 577992 | Henry Roux 577440
             "Dr. K English - Project Sponsor\n"
             "Belgium ITversity, RSA Center of Biological Control, Rhodes University, US"
         )
