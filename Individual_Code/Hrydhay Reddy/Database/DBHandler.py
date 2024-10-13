@@ -12,7 +12,7 @@ DB_PORT = "5432"
 
 #---------------------------------------------------------------------------------------------------
 
-def SaveData(required):
+def SaveData():
     TestConnection()
 
 def TestConnection():
@@ -68,5 +68,4 @@ def SaveToCSV(rows):
     print('Data fetched successfully')
     print(data)
 
-required = 1
-SaveData(required)
+SaveData()
