@@ -1,7 +1,7 @@
 
 import psycopg2
 import json
-
+import csv
 #---------------------------------------------------------------------------------------------------
 
 DB_NAME = "leafDB"
@@ -11,6 +11,9 @@ DB_HOST = "localhost"
 DB_PORT = "5432"
 
 #---------------------------------------------------------------------------------------------------
+
+def SaveData(required):
+    TestConnection()
 
 def TestConnection():
     try:
@@ -22,35 +25,48 @@ def TestConnection():
         print("Database connected successfully")
     except:
         print("Database not connected successfully")
+    
+    selectDB(conn)
+
+# def insertDB(table):
+    # cur = conn.cursor()
+    # cur.execute("INSERT * FROM public.\"Dummy\"")
+    # rows = cur.fetchall()
+    # SaveToCSV(rows)
+
+# def deleteDB(table):
+    # cur = conn.cursor()
+    # cur.execute("DELETE FROM public.\"Dummy\"")
+    # rows = cur.fetchall()
+    # SaveToCSV()
+
+# def updateDB(table):
+    # cur = conn.cursor()
+    # cur.execute("UPDATE * FROM public.\"Dummy\"")
+    # rows = cur.fetchall()
+    # SaveToCSV()
+
+def selectDB(conn):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM public.\"Dummy\"") #public.\"Registration\"
+    cur.execute("SELECT * FROM public.\"Dummy\"")
     rows = cur.fetchall()
-    for data in rows:
-        print("ID :" + str(data[0]))
-        print("NAME :" + data[1])
-        print("SURNAME :" + data[2])
-    print('Data fetched successfully')
     conn.close()
-    
-    #Data to be written
-    dictionary = {
-        "id": [data[0]],
-        "name":[data[1]],
-        'surname':[data[2]]
-    }
-    
-    SaveToJson(dictionary)
+    SaveToCSV(rows)
 
-#---------------------------------------------------------------------------------------------------
+def SaveToCSV(rows):
+    for data in rows:
+        data = [{'id': data[0], 'name': data[1], 'surname': data[2]}]
+        
+        try:
+            with open('data.csv', 'a', newline='') as csvfile:
+                fieldnames = ['id', 'name', 'surname']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                #writer.writeheader()
+                writer.writerows(data)
+        except:
+            print("Error in creating file.\nFile already exists")
+    print('Data fetched successfully')
+    print(data)
 
-def SaveToJson(dictionary):
-    # Serializing json
-    json_object = json.dumps(dictionary, indent=4)
-
-    # Writing to sample.json
-    with open("sample.json", "w") as outfile:
-        outfile.write(json_object)
-
-#---------------------------------------------------------------------------------------------------
-
-TestConnection()
+required = 1
+SaveData(required)
