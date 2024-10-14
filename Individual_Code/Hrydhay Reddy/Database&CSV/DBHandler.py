@@ -48,7 +48,7 @@ def TestConnection():
 
 def selectDB(conn):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM public.\"Dummy\"")
+    cur.execute("SELECT * FROM public.\"dummy\"")
     rows = cur.fetchall()
     conn.close()
     SaveToCSV(rows)
@@ -58,7 +58,7 @@ def SaveToCSV(rows):
         data = [{'id': data[0], 'name': data[1], 'surname': data[2]}]
         
         try:
-            with open('data.csv', 'a', newline='') as csvfile:
+            with open('output.csv', 'a', newline='') as csvfile:
                 fieldnames = ['id', 'name', 'surname']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 #writer.writeheader()
@@ -69,3 +69,10 @@ def SaveToCSV(rows):
     print(data)
 
 SaveData()
+
+
+# SQL Insert for Dummy Table - Tempory
+# INSERT INTO public.dummy(
+# 	id, name, surname)
+# 	VALUES (1,'Jacques','Van Niekerk'),
+# 			(2,'Hrudhay','Reddy');
