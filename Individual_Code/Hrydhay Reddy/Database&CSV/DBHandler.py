@@ -124,12 +124,12 @@ def selectCollection():
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        tableData1 = selectDetails(conn)
+        tableData1 = selectDetails(conn,arrayData)
         tableData2 = selectImages(conn)
         tableData3 = selectImageData(conn)
         conn.close()
-        #return tableData1, tableData2, 
-tableData3
+        #return tableData1, tableData2, tableData3
+
 def insertCollection():
     conn = TestConnection()
     if conn == 'null':
@@ -163,9 +163,11 @@ def deleteCollection():
         deleteImageData(conn)
         conn.close()
 
+selectCollection()
+
 # =========================================== CALLING STATEMENTS ===========================================
 
-
+# BEGIN HERE - Lists/Tuples/Sets/Dictionaries
 
 # def SaveToCSV(rows):
 #     tableData1, tableData2, tableData3 = selectCollection()
