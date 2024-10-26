@@ -1,9 +1,10 @@
+# =========================================== IMPORT STATEMENTS ===========================================
 
 import psycopg2
 import json
 import csv
 
-#---------------------------------------------------------------------------------------------------
+# =========================================== DB LOGIN CREDENTIALS ===========================================
 
 DB_NAME = "leafDB"
 DB_USER = "postgres"
@@ -11,7 +12,7 @@ DB_PASS = "12345"
 DB_HOST = "localhost"
 DB_PORT = "5432"
 
-#---------------------------------------------------------------------------------------------------
+# =========================================== TEST CONNECTION ===========================================
 
 def TestConnection():
     try:
@@ -29,141 +30,161 @@ def TestConnection():
 
 # =========================================== SELECT STATEMENTS ===========================================
 
-def selectDetails(conn):
+def selectAllData(conn, imagedata_id):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM public.\"details\"")
-    rows = cur.fetchall()
-    cur.close()
-    return rows
-
-def selectImages(conn):
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM public.\"images\"")
-    rows = cur.fetchall()
-    cur.close()
-    return rows
-
-def selectImageData(conn):
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM public.\"imagedata\"")
+    cur.execute(f'''
+        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+            FROM public.\"details\"
+                FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
+                FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
+                    WHERE imagedata_id = {imagedata_id}
+                ''')
     rows = cur.fetchall()
     cur.close()
     return rows
 
 # =========================================== INSERT STATEMENTS ===========================================
 
-def insertDetails(conn):
+def insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
     cur = conn.cursor()
-    cur.execute(f'INSERT INTO public.\"details\" (Details_ID,ImageLocation,ImageDate) ' 
-                + 'VALUES {data1},{data2},{data3}')
-    conn.commit()
-    cur.close()
-
-def insertImages(conn):
-    cur = conn.cursor()
-    cur.execute('INSERT INTO public.\"images\" (Image_ID, Details_ID, ImagePathBack, ImagePathFront) '
-                + 'VALUES {data4},{data5},{data6},{data7}')
-    conn.commit()
-    cur.close()
-
-def insertImageData(conn):
-    cur = conn.cursor()
-    cur.execute('INSERT INTO public.\"imagedata\" (ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage,Petiole_Length) ' 
-                + 'VALUES {data8},{data9},{data10},{data11},{data12},{data13},{data14},{data15},{data16},{data17}')
+    cur.execute(f'''
+        INSERT INTO public.\"details\" (Details_ID,ImageLocation,ImageDate) 
+        VALUES ({data1},'{data2}','{data3}');
+        
+        INSERT INTO public.\"images\" (Image_ID, Details_ID, ImagePathBack, ImagePathFront)
+        VALUES ({data4},{data5},'{data6}','{data7}');
+        
+        INSERT INTO public.\"imagedata\" (ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage,Petiole_Length)
+        VALUES ({data8},{data9},'{data10}',{data11},{data12},{data13},{data14},{data15},{data16},{data17});
+                ''')
     conn.commit()
     cur.close()
 
 # =========================================== UPDATE STATEMENTS ===========================================
 
-def updateDetails(conn):
+def updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
     cur = conn.cursor()
-    cur.execute("UPDATE public.\"details\" SET ImageLocation = {data1}, ImageDate = {data2} WHERE Details_ID = {data3}")
-    conn.commit()
-    cur.close()
-
-def updateImages(conn):
-    cur = conn.cursor()
-    cur.execute("UPDATE public.\"images\" SET Details_ID = {data4}, ImagePathBack = {data5}, ImagePathFront = {data6} WHERE Image_ID = {data7}")
-    conn.commit()
-    cur.close()
-
-def updateImageData(conn):
-    cur = conn.cursor()
-    cur.execute("UPDATE public.\"imagedata\" SET Image_ID = {data8}, ImageLable = {data9}, Lamina_Area = {data10}, Lamina_Length = {data11}, Lamina_Width = {data12}, Scar_Count = {data13}, Scar_Area = {data14}, DamagePercentage = {data15}, Petiole_Length = {data16}  WHERE ImageData_ID = {data17}")
+    cur.execute(f'''
+        UPDATE public.\"details\" 
+        SET ImageLocation = '{data2}', ImageDate = '{data3}'
+        WHERE Details_ID = {data1};
+        
+        UPDATE public.\"images\"
+        SET ImagePathBack = '{data6}', ImagePathFront = '{data7}'
+        WHERE Image_ID = {data4};
+        
+        UPDATE public.\"imagedata\"
+        SET ImageLable = '{data10}', Lamina_Area = {data11}, Lamina_Length = {data12}, Lamina_Width = {data13}, Scar_Count = {data14}, Scar_Area = {data15}, DamagePercentage = {data16}, Petiole_Length = {data17}
+        WHERE ImageData_ID = {data8};
+                ''')
     conn.commit()
     cur.close()
 
 # =========================================== DELETE STATEMENTS ===========================================
+# NOTE there might be a chance that we only need to delete details table or data found inside that table
+# as PostgreSQL does cascading delete if 1 value (FK) gets deleted from Details table
 
-def deleteDetails(conn):
-    cur = conn.cursor()
-    cur.execute("DELETE FROM public.\"details\" WHERE Details_ID = {data1}")
-    conn.commit()
-    #totalAffectedRows = cur.rowcount
-    cur.close()
+# NOTE I have confirmed that this is the case, but further investigation is needed
 
-def deleteImages(conn):
+def deleteDetails(conn, data1):
     cur = conn.cursor()
-    cur.execute("DELETE FROM public.\"images\" WHERE Image_ID = {data2}")
+    cur.execute(f'''
+        DELETE FROM public.\"details\" WHERE Details_ID = '{data1}';
+                ''')
     conn.commit()
-    #totalAffectedRows = cur.rowcount
-    cur.close()
-
-def deleteImageData(conn):
-    cur = conn.cursor()
-    cur.execute("DELETE FROM public.\"imagedata\" WHERE ImageData_ID = {data3}")
-    conn.commit()
-    #totalAffectedRows = cur.rowcount
     cur.close()
 
 # =========================================== COLLECTION STATEMENTS ===========================================
 
-def selectCollection():
+def selectCollection(imagedata_id):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        tableData1 = selectDetails(conn,arrayData)
-        tableData2 = selectImages(conn)
-        tableData3 = selectImageData(conn)
+        tableData = selectAllData(conn, imagedata_id)
         conn.close()
-        #return tableData1, tableData2, tableData3
+        return tableData
 
-def insertCollection():
+def insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        insertDetails(conn)
-        insertImages(conn)
-        insertImageData(conn)
+        insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
         conn.close()
 
-def updateCollection():
+def updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        updateDetails(conn)
-        updateImages(conn)
-        updateImageData(conn)
+        updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
         conn.close()
 
-def deleteCollection():
+def deleteCollection(data1):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        deleteDetails(conn)
-        deleteImages(conn)
-        deleteImageData(conn)
+        deleteDetails(conn, data1)
+        # deleteImages(conn)
+        # deleteImageData(conn)
         conn.close()
 
-selectCollection()
+# =========================================== TEST FEATURES STATEMENTS ===========================================
+
+# SELECT
+# imagedata_id = "5";
+# tableData = selectCollection(imagedata_id)
+# print(tableData)
+
+# INSERT
+# data1 = 7
+# data2 = 'Johannesburg'
+# data3 = '2024-01-01'
+# data4 = 7
+# data5 = 7
+# data6 = './image7_back.png'
+# data7 = './image7_front.png'
+# data8 = 7
+# data9 = 7
+# data10 = 'image7'
+# data11 = 278
+# data12 = 14
+# data13 = 15
+# data14 = 14
+# data15 = 26
+# data16 = 0.146
+# data17 = 7
+# insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+
+# UPDATE
+# data1 = 7
+# data2 = 'Joburg'
+# data3 = '2024-01-01'
+# data4 = 7
+# data5 = 7
+# data6 = './image7_back333.png'
+# data7 = './image7_front333.png'
+# data8 = 7
+# data9 = 7
+# data10 = 'image744'
+# data11 = 278
+# data12 = 14
+# data13 = 15
+# data14 = 14
+# data15 = 26
+# data16 = 0.146
+# data17 = 7
+# updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+
+# DELETE
+# data1 = 7
+# deleteCollection(data1)
 
 # =========================================== CALLING STATEMENTS ===========================================
 
