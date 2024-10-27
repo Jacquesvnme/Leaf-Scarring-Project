@@ -65,7 +65,7 @@ def insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, 
 def updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
     cur = conn.cursor()
     cur.execute(f'''
-        UPDATE public.\"details\" 
+        UPDATE public.\"details\"
         SET ImageLocation = '{data2}', ImageDate = '{data3}'
         WHERE Details_ID = {data1};
         
@@ -131,18 +131,62 @@ def deleteCollection(data1):
     elif conn != 'null':
         print('Connection String Found')
         deleteDetails(conn, data1)
-        # deleteImages(conn)
-        # deleteImageData(conn)
         conn.close()
+
+# =========================================== CALLING STATEMENTS ===========================================
+
+def selectData(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+            FROM public.\"details\"
+                FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
+                FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows
+
+def SaveToCSV(tableData):
+    try:
+        with open('output.csv', 'w', newline='') as csvfile:
+            fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+    except:
+        print("Error in creating file.\nFile already exists")
+    
+    for data in tableData:
+        data = [{'imagedata_id': data[0], 'imagelocation': data[1], 'imagedate': data[2], 'imagepathback':data[3], 'imagepathfront':data[4], 'imagelable':data[5], 'lamina_area':data[6], 'lamina_length':data[7], 'lamina_width':data[8], 'scar_count':data[9], 'scar_area':data[10], 'damagepercentage':data[11], 'petiole_length':data[12]}]
+        
+        try:
+            with open('output.csv', 'a', newline='') as csvfile:
+                fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writerows(data)
+        except:
+            print("Error in creating file.\nFile already exists")
+    print('Data fetched successfully')
+    print(data)
+
+def SaveProcess():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = selectData(conn)
+        conn.close()
+        SaveToCSV(tableData)
 
 # =========================================== TEST FEATURES STATEMENTS ===========================================
 
-# SELECT
+#* SELECT
 # imagedata_id = "5";
 # tableData = selectCollection(imagedata_id)
 # print(tableData)
 
-# INSERT
+#* INSERT
 # data1 = 7
 # data2 = 'Johannesburg'
 # data3 = '2024-01-01'
@@ -162,7 +206,7 @@ def deleteCollection(data1):
 # data17 = 7
 # insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
 
-# UPDATE
+#* UPDATE
 # data1 = 7
 # data2 = 'Joburg'
 # data3 = '2024-01-01'
@@ -182,26 +226,9 @@ def deleteCollection(data1):
 # data17 = 7
 # updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
 
-# DELETE
+#* DELETE
 # data1 = 7
 # deleteCollection(data1)
 
-# =========================================== CALLING STATEMENTS ===========================================
-
-# BEGIN HERE - Lists/Tuples/Sets/Dictionaries
-
-# def SaveToCSV(rows):
-#     tableData1, tableData2, tableData3 = selectCollection()
-#     for data in rows:
-#         data = [{'id': data[0], 'name': data[1], 'surname': data[2]}]
-        
-#         try:
-#             with open('output.csv', 'a', newline='') as csvfile:
-#                 fieldnames = ['id', 'name', 'surname']
-#                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-#                 #writer.writeheader()
-#                 writer.writerows(data)
-#         except:
-#             print("Error in creating file.\nFile already exists")
-#     print('Data fetched successfully')
-#     print(data)
+#* SAVE DATA PROCESS
+# SaveProcess()
