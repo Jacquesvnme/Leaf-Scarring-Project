@@ -30,6 +30,19 @@ def TestConnection():
 
 # =========================================== SELECT STATEMENTS ===========================================
 
+def TotalRecords(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+            FROM public.\"details\"
+                FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
+                FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
+                ''')
+    rows = cur.fetchall()
+    totalAffectedRows = cur.rowcount
+    cur.close()
+    return totalAffectedRows
+
 def selectAllData(conn, imagedata_id):
     cur = conn.cursor()
     cur.execute(f'''
@@ -94,7 +107,25 @@ def deleteDetails(conn, data1):
     conn.commit()
     cur.close()
 
+def deleteDetails(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        DELETE FROM public.\"details\";
+                ''')
+    conn.commit()
+    cur.close()
+
 # =========================================== COLLECTION STATEMENTS ===========================================
+
+def selectCollection():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        totalAmountOfRecords = TotalRecords(conn)
+        conn.close()
+        return totalAmountOfRecords
 
 def selectCollection(imagedata_id):
     conn = TestConnection()
@@ -131,6 +162,15 @@ def deleteCollection(data1):
     elif conn != 'null':
         print('Connection String Found')
         deleteDetails(conn, data1)
+        conn.close()
+
+def deleteAll():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        deleteDetails(conn)
         conn.close()
 
 # =========================================== CALLING STATEMENTS ===========================================
