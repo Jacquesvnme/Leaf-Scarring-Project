@@ -117,7 +117,7 @@ def deleteDetails(conn):
 
 # =========================================== COLLECTION STATEMENTS ===========================================
 
-def selectCollection():
+def rowCount():
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
