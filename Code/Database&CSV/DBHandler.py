@@ -107,7 +107,7 @@ def deleteDetails(conn, data1):
     conn.commit()
     cur.close()
 
-def deleteDetails(conn):
+def deleteAllDetails(conn):
     cur = conn.cursor()
     cur.execute(f'''
         DELETE FROM public.\"details\";
@@ -170,7 +170,7 @@ def deleteAll():
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        deleteDetails(conn)
+        deleteAllDetails(conn)
         conn.close()
 
 # =========================================== CALLING STATEMENTS ===========================================
