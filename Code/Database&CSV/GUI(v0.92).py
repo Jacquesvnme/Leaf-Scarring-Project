@@ -151,10 +151,12 @@ class MainPage(QWidget):
         #CREDITS SECTION
         self.credit_label = QLabel(self)
         self.credit_label.setText(
-            "Credits:\n"
-            "Group names D Giovannoni - Project Supervisor\n"
-            "Dr. K English - Project Sponsor\n"
-            "Belgium ITversity, RSA Center of Biological Control, Rhodes University, US"
+            "<h2 style='font-size: 22px;'>Credits:</h2>"
+            "<p style='font-size: 20px;'>"
+            "D Giovannoni - Project Supervisor<br>"
+            "Dr. K English - Project Sponsor<br>"
+            "Belgium ITversity, RSA Center of Biological Control, Rhodes University, US</p>\n"
+            "<p style='font-size: 18px;'>H Holl, H Roux, H Reddy, J v Niekerk, J Pretorius, JA Mentz</p>"
         )
         self.credit_label.setFont(QFont('Inter', 20))
         self.credit_label.setAlignment(Qt.AlignCenter)
