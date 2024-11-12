@@ -1,4 +1,4 @@
-"""Pip installs needed: PyQT5, psycopg2, openCV"""
+"""Pip installs needed: PyQT5, psycopg2, openCV, python-dotenv"""
 
 import sys
 from PyQt5.QtWidgets import (
@@ -11,7 +11,7 @@ from PyQt5.QtCore import Qt, QDate, QSize
 import psycopg2
 from psycopg2 import sql
 
-from Database import DBHandler as DBObj
+from database import DBHandler as DBObj
 
 #import FilteringTest as FTObj
 
@@ -70,6 +70,14 @@ class MainWindow(QWidget):
         palette.setBrush(QPalette.Background, QBrush(scaled_background))
         self.setAutoFillBackground(True)
         self.setPalette(palette)
+
+
+
+
+
+
+
+
 
 
 
