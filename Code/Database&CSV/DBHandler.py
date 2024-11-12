@@ -3,14 +3,7 @@
 import psycopg2
 import json
 import csv
-
-# =========================================== DB LOGIN CREDENTIALS ===========================================
-
-DB_NAME = "leafDB"
-DB_USER = "postgres"
-DB_PASS = "12345"
-DB_HOST = "localhost"
-DB_PORT = "5432"
+import dotenv
 
 # =========================================== TEST CONNECTION ===========================================
 
@@ -30,6 +23,66 @@ def TestConnection():
 
 # =========================================== SELECT STATEMENTS ===========================================
 
+def avgLeafArea(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT avg(lamina_area) as LaminaArea
+            FROM public.\"imagedata\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0]
+
+def avgScarArea(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT avg(scar_area) as ScarArea
+            FROM public.\"imagedata\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0]
+
+def avgPercentageDamage(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT avg(damagepercentage) as DamagePercentage
+            FROM public.\"imagedata\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0]
+
+def avgScarsCount(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT avg(scar_count) as ScarCount
+            FROM public.\"imagedata\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0]
+
+def avgLaminaLength(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT avg(lamina_length) as LaminaLength
+            FROM public.\"imagedata\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0]
+
+def avgLaminaWidth(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT avg(lamina_width) as LaminaWidth
+            FROM public.\"imagedata\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0]
+
 def TotalRecords(conn):
     cur = conn.cursor()
     cur.execute(f'''
@@ -43,7 +96,19 @@ def TotalRecords(conn):
     cur.close()
     return totalAffectedRows
 
-def selectAllData(conn, imagedata_id):
+def selectAllData(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+            FROM public.\"details\"
+                FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
+                FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows
+
+def selectSpecificData(conn, imagedata_id):
     cur = conn.cursor()
     cur.execute(f'''
         SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
@@ -117,6 +182,66 @@ def deleteAllDetails(conn):
 
 # =========================================== COLLECTION STATEMENTS ===========================================
 
+def LeafArea():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = avgLeafArea(conn)
+        conn.close()
+        return tableData[0]
+
+def ScarArea():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = avgScarArea(conn)
+        conn.close()
+        return tableData[0]
+
+def PercentageDamage():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = avgPercentageDamage(conn)
+        conn.close()
+        return tableData[0]
+
+def ScarsCount():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = avgScarsCount(conn)
+        conn.close()
+        return tableData[0]
+
+def LaminaLength():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = avgLaminaLength(conn)
+        conn.close()
+        return tableData[0]
+
+def LaminaWidth():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = avgLaminaWidth(conn)
+        conn.close()
+        return tableData[0]
+
 def rowCount():
     conn = TestConnection()
     if conn == 'null':
@@ -127,13 +252,23 @@ def rowCount():
         conn.close()
         return totalAmountOfRecords
 
+def selectAllCollection():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = selectAllData(conn)
+        conn.close()
+        return tableData
+
 def selectCollection(imagedata_id):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        tableData = selectAllData(conn, imagedata_id)
+        tableData = selectSpecificData(conn, imagedata_id)
         conn.close()
         return tableData
 
@@ -272,3 +407,6 @@ def SaveProcess():
 
 #* SAVE DATA PROCESS
 # SaveProcess()
+
+# tableData = LeafArea()
+# print('Data: ' + str(tableData))
