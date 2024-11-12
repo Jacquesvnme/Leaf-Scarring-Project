@@ -1,10 +1,9 @@
-"""Pip installs needed: PyQT5, psycopg2, openCV"""
+"""Pip installs needed: PyQT5, psycopg2"""
 
 import sys
 from PyQt5.QtWidgets import (
     QApplication, QLabel, QPushButton, QWidget, QMessageBox, QFileDialog, QListWidget, QVBoxLayout, QLineEdit,
-    QDateEdit, QListWidgetItem, QStackedWidget, QTableWidget, QTableWidgetItem, QScrollArea, QHeaderView,
-    QWidget, QGridLayout)
+    QDateEdit, QListWidgetItem, QStackedWidget, QTableWidget, QTableWidgetItem, QScrollArea, QHeaderView)
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush, QIcon
 from PyQt5.QtCore import Qt, QDate, QSize
 
@@ -13,7 +12,7 @@ from psycopg2 import sql
 
 import DBHandler as DBObj
 
-#import FilteringTest as FTObj
+import FilteringTest as FTObj
 
 #import count.ipynb
 
@@ -62,41 +61,13 @@ class MainWindow(QWidget):
         
     def show_output_page(self):
         self.stacked_widget.setCurrentWidget(self.output_page)
-        
-    def set_background_image(self):
-        palette = QPalette()
-        background = QPixmap("./Images/BG.jpg")
-        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
-        palette.setBrush(QPalette.Background, QBrush(scaled_background))
-        self.setAutoFillBackground(True)
-        self.setPalette(palette)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #HOME PAGE
 class MainPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setGeometry(20, 20, 1280, 720)  #SETS SIZE OF APPLICATION
-        MainWindow.set_background_image(self)
+        self.set_background_image()
         
         #MAIN TITLE
         self.title_label = QLabel(self)
@@ -171,12 +142,10 @@ class MainPage(QWidget):
         #CREDITS SECTION
         self.credit_label = QLabel(self)
         self.credit_label.setText(
-            "<h2 style='font-size: 22px;'>Credits:</h2>"
-            "<p style='font-size: 20px;'>"
-            "D Giovannoni - Project Supervisor<br>"
-            "Dr. K English - Project Sponsor<br>"
-            "Belgium ITversity, RSA Center of Biological Control, Rhodes University, US</p>\n"
-            "<p style='font-size: 18px;'>H Holl, H Roux, H Reddy, J v Niekerk, J Pretorius, JA Mentz</p>"
+            "Credits:\n"
+            "Group names D Giovannoni - Project Supervisor\n"
+            "Dr. K English - Project Sponsor\n"
+            "Belgium ITversity, RSA Center of Biological Control, Rhodes University, US"
         )
         self.credit_label.setFont(QFont('Inter', 20))
         self.credit_label.setAlignment(Qt.AlignCenter)
@@ -197,6 +166,14 @@ class MainPage(QWidget):
         """)
         self.credit_label.setWordWrap(True)
 
+    def set_background_image(self):
+        palette = QPalette()
+        background = QPixmap("./Images/BG.jpg")
+        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
+        palette.setBrush(QPalette.Background, QBrush(scaled_background))
+        self.setAutoFillBackground(True)
+        self.setPalette(palette)
+
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
@@ -207,39 +184,6 @@ class MainPage(QWidget):
         )
         QMessageBox.information(self, "Instructions", instructions)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #NEW SAMPLE PAGE
 class NewSamplePage(QWidget):
     def __init__(self, parent=None):
@@ -247,7 +191,7 @@ class NewSamplePage(QWidget):
 
         self.setWindowTitle("BCASAA")
         self.setGeometry(100, 100, 1280, 720)
-        MainWindow.set_background_image(self)
+        self.set_background_image()
 
         # Samples Image Preview section
         self.sample_label = QLabel(self)
@@ -358,7 +302,7 @@ class NewSamplePage(QWidget):
                 color: #000000;
                 }                           
         """)
-        #self.add_data_to_db()
+        self.add_data_to_db()
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
@@ -397,6 +341,14 @@ class NewSamplePage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
 
+    def set_background_image(self):
+        palette = QPalette()
+        background = QPixmap("./Images/BG.jpg")
+        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
+        palette.setBrush(QPalette.Background, QBrush(scaled_background))
+        self.setAutoFillBackground(True)
+        self.setPalette(palette)
+
     def open_image_dialog(self):
         file_dialog = QFileDialog(self)
         file_dialog.setFileMode(QFileDialog.ExistingFiles)
@@ -409,16 +361,11 @@ class NewSamplePage(QWidget):
     def add_image_thumbnail(self, file_path):
         pixmap = QPixmap(file_path)
         thumbnail = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        
-        fileFirstCut = file_path.rfind("/") + 1
-        fileSecondCut = file_path.find(".")
-        captionName = file_path[fileFirstCut:fileSecondCut]
-
-        item = QListWidgetItem(QIcon(thumbnail), f"{captionName}")
+        item = QListWidgetItem()
+        item.setIcon(thumbnail)
         self.image_preview_area.addItem(item)
-
         
-    """def add_data_to_db(self):
+    def add_data_to_db(self):
         imagelocation = self.location_input.text()
         imagedate = self.date_input.date().toString("yyyy-mm-dd")        
         
@@ -446,7 +393,7 @@ class NewSamplePage(QWidget):
                 #.get('petiole_length', 0)
             )        
             # Insert data into the database
-            DBObj.insertCollection(*data)"""
+            DBObj.insertCollection(*data)
             
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
@@ -459,33 +406,6 @@ class NewSamplePage(QWidget):
         )
         QMessageBox.information(self, "Instructions", instructions)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #DATA REVIEW PAGE
 class DataReviewPage(QWidget):
     def __init__(self, parent=None):
@@ -493,7 +413,7 @@ class DataReviewPage(QWidget):
 
         self.setWindowTitle("BCASAA")
         self.setGeometry(100, 100, 1280, 720)
-        MainWindow.set_background_image(self)
+        self.set_background_image()
 
         #DATA SET TABLE
         self.dataSets_label = QLabel(self)
@@ -516,10 +436,12 @@ class DataReviewPage(QWidget):
         """)
         self.dataSets_table = QTableWidget(self)
         self.dataSets_table.setGeometry(40, 140, 1200, 510)
-        self.dataSets_table.setColumnCount(13)
+        self.dataSets_table.setColumnCount(3)
         header = self.dataSets_table.horizontalHeader()       
-
-        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'])
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        self.dataSets_table.setHorizontalHeaderLabels(['Date', 'Location', 'Miscellaneous'])
         self.dataSets_table.setSortingEnabled(True)  #CAN SORT BY COLUMN
         self.load_table_data()
 
@@ -586,11 +508,30 @@ class DataReviewPage(QWidget):
         icon = QIcon("./Images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
+
+    def set_background_image(self):
+        palette = QPalette()
+        background = QPixmap("./Images/BG.jpg")
+        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
+        palette.setBrush(QPalette.Background, QBrush(scaled_background))
+        self.setAutoFillBackground(True)
+        self.setPalette(palette)
         
     #LOADS ALL SAMPLES FROM DB FOR THE TABLE WIP
     def load_table_data(self):
         try:
-            rows = DBObj.selectAllCollection()
+            #CONNECTS TO DB
+            conn = psycopg2.connect(
+                host="localhost",    #DB HOST NAME
+                database="tester",   #DB NAME
+                user="postgres",     #DB USER
+                password="admin"     #DB PASSWORD
+            )
+            cursor = conn.cursor()
+
+            #FETCHES DATA
+            cursor.execute("SELECT date, location, miscellaneous FROM datasets")
+            rows = cursor.fetchall()
 
             #POPULATES TABLE
             self.dataSets_table.setRowCount(len(rows))
@@ -598,6 +539,7 @@ class DataReviewPage(QWidget):
                 for col_idx, data in enumerate(row_data):
                     item = QTableWidgetItem(str(data))
                     self.dataSets_table.setItem(row_idx, col_idx, item)
+            conn.close()
 
         except psycopg2.Error as e:
             QMessageBox.critical(self, "Database Error", f"Error connecting to the database: {e}")
@@ -609,31 +551,34 @@ class DataReviewPage(QWidget):
         if selected_row == -1:
             QMessageBox.warning(self, "Selection Error", "Please select a data set from the table.")
             return
-        
-#'imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable',
-# #'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'
 
         # Get selected values from the table
-        imagedata_id = self.dataSets_table.item(selected_row, 0).text()
-        imagelocation = self.dataSets_table.item(selected_row, 1).text()
-        imagedate = self.dataSets_table.item(selected_row, 2).text()
-        imagepathback = self.dataSets_table.item(selected_row, 3).text()
-        imagepathfront = self.dataSets_table.item(selected_row, 4).text()
-        imagelable = self.dataSets_table.item(selected_row, 5).text()
-        lamina_area = self.dataSets_table.item(selected_row, 6).text()
-        lamina_length = self.dataSets_table.item(selected_row, 7).text()
-        lamina_width = self.dataSets_table.item(selected_row, 8).text()
-        scar_count = self.dataSets_table.item(selected_row, 9).text()
-        scar_area = self.dataSets_table.item(selected_row, 10).text()
-        damagepercentage = self.dataSets_table.item(selected_row, 11).text()
-        petiole_length = self.dataSets_table.item(selected_row, 12).text()
+        date = self.dataSets_table.item(selected_row, 0).text()
+        location = self.dataSets_table.item(selected_row, 1).text()
+        misc = self.dataSets_table.item(selected_row, 2).text()
         
         try:
-            result = DBObj.selectCollection(imagedata_id)
+            # Connect to PostgreSQL database
+            conn = psycopg2.connect(
+                host="localhost",    #DB HOST NAME
+                database="tester",   #DB NAME
+                user="postgres",     #DB USER
+                password="admin"     #DB PASSWORD
+            )
+            cursor = conn.cursor()
+
+            #QUERY TO FETCH SPESIFIC DATASET WIP
+            query = sql.SQL("SELECT * FROM datasets WHERE date = %s AND location = %s AND miscellaneous = %s")
+            cursor.execute(query, (date, location, misc))
+
+            #PLACEHOLDER CODE TO TEST
+            result = cursor.fetchone()
             if result:
-                QMessageBox.information(self, "Sample Selected", f"Data: {result[0]}")
+                QMessageBox.information(self, "Sample Selected", f"Data: {result}")
             else:
                 QMessageBox.warning(self, "No Data", "No matching data found in the database.")
+                
+            conn.close()
 
         except psycopg2.Error as e:
             QMessageBox.critical(self, "Database Error", f"Error fetching data from the database: {e}")
@@ -653,35 +598,6 @@ class DataReviewPage(QWidget):
         )
         QMessageBox.information(self, "Instructions", instructions)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #OUTPUT PAGE
 class OutputPage(QWidget):
     def __init__(self, parent=None):
@@ -689,7 +605,7 @@ class OutputPage(QWidget):
 
         self.setWindowTitle("BCASAA")
         self.setGeometry(100, 100, 1280, 720)
-        MainWindow.set_background_image(self)
+        self.set_background_image()
 
         #STARTS IMAGE ARRAY
         self.images = []  #IMAGES STORED AS STRINGS/FILE PATHS
@@ -774,7 +690,8 @@ class OutputPage(QWidget):
             }
         """)
         
-        #AVERAGE RESULTS AREA        
+        #AVERAGE RESULTS AREA
+        
         #ADD CODE TO RETRIVE COLLECTION DATA
         #ADD CODE TO AVERAGE RESULTS OF DATA7, DATA8, DATA9, DATA10, DATA11, DATA12, DATA13
         
@@ -805,11 +722,6 @@ class OutputPage(QWidget):
             }
         """)
         
-        #GRID LAYOUT FOR DATA
-        self.imageResults_area.setWidgetResizable(True)
-        self.avg_results_area.setWidgetResizable(True)
-        self.display_stats_average(self.avg_results_area)
-        self.display_stats_individual(self.imageResults_area)
         
         #SAVE DATA BUTTON
         
@@ -831,11 +743,10 @@ class OutputPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        self.save_button.clicked.connect(self.show_Save);
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
-        self.instructions_button.setGeometry#571b23
+        self.instructions_button.setGeometry(1210, 20, 50, 50)
         self.instructions_button.setStyleSheet("""
             QPushButton {
                 background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
@@ -893,127 +804,16 @@ class OutputPage(QWidget):
                 image_name = item.text()
                 if image_name in self.images:
                     self.images.remove(image_name)
-            self.refresh_image_preview()
-            
-    #TITLES AND FIELDS FOR SHOWING STATS
-    # Helper function to create grid layout for stats labels
-    # Helper function to create grid layout for stats labels
+            self.refresh_image_preview()   
     
-    # Load title & data for Stats Individual Side
-    def create_stats_grid_individual(self):
-        grid_layout_average = QGridLayout()
-
-        # Labels for each stat field
-        stats = [
-            ("Leaf Area", 0, 0),
-            ("Scarred Area", 1, 0),
-            ("Percentage Damage", 2, 0),
-            ("Number of Scars", 3, 0),
-            ("Length of Leaf", 4, 0),
-            ("Width of Leaf", 5, 0),
-            (f"X cm<sup>2</sup>", 0, 1),
-            (f"X cm<sup>2</sup>", 1, 1),
-            (f"X", 2, 1),
-            (f"X", 3, 1),
-            (f"X cm", 4, 1),
-            (f"X cm", 5, 1)
-        ]
-
-        for text, row, col in stats:
-            label = QLabel(text)
-            
-            # Apply different styles for the second column
-            if col == 1:
-                label.setAlignment(Qt.AlignRight)
-                label.setStyleSheet("""
-                    QLabel {
-                        font-family: 'Inter';
-                        font-weight: 400;
-                        font-size: 18px;
-                    }
-                """)
-            else:
-                label.setAlignment(Qt.AlignLeft)
-                label.setStyleSheet("""
-                    QLabel {
-                        font-family: 'Inter';
-                        font-weight: 500;
-                        font-size: 18px;
-                    }
-                """)        
-            grid_layout_average.addWidget(label, row, col)
-
-        return grid_layout_average
-
-    # Load title & data for Stats Average Side
-    def create_stats_grid_average(self):
-        grid_layout_average = QGridLayout()
-
-        # Labels for each stat field
-        stats = [
-            ("Leaf Area", 0, 0),
-            ("Scarred Area", 1, 0),
-            ("Percentage Damage", 2, 0),
-            ("Number of Scars", 3, 0),
-            ("Length of Leaf", 4, 0),
-            ("Width of Leaf", 5, 0),
-            (f"{round(DBObj.LeafArea(),4)} cm<sup>2</sup>", 0, 1),
-            (f"{round(DBObj.ScarArea(),4)} cm<sup>2</sup>", 1, 1),
-            (f"{round(DBObj.PercentageDamage(),4)}", 2, 1),
-            (f"{round(DBObj.ScarsCount(),4)}", 3, 1),
-            (f"{round(DBObj.LaminaLength(),4)} cm", 4, 1),
-            (f"{round(DBObj.LaminaWidth(),4)} cm", 5, 1)
-        ]
-
-        for text, row, col in stats:
-            label = QLabel(text)
-            
-            # Apply different styles for the second column
-            if col == 1:
-                label.setAlignment(Qt.AlignRight)
-                label.setStyleSheet("""
-                    QLabel {
-                        font-family: 'Inter';
-                        font-weight: 400;
-                        font-size: 18px;
-                    }
-                """)
-            else:
-                label.setAlignment(Qt.AlignLeft)
-                label.setStyleSheet("""
-                    QLabel {
-                        font-family: 'Inter';
-                        font-weight: 500;
-                        font-size: 18px;
-                    }
-                """)        
-            grid_layout_average.addWidget(label, row, col)
-
-        return grid_layout_average
-
-# Displays stats layout in a scroll area with a transparent background
-    def display_stats_average(self, scroll_area):
-        container_widget = QWidget()
-        grid_layout_average = self.create_stats_grid_average()
-        container_widget.setLayout(grid_layout_average)
-        container_widget.setStyleSheet("background-color: transparent;")  # Set container background to transparent
-        scroll_area.setWidget(container_widget)
-
-    def display_stats_individual(self, scroll_area):
-        container_widget = QWidget()
-        grid_layout_individual = self.create_stats_grid_individual()
-        container_widget.setLayout(grid_layout_individual)
-        container_widget.setStyleSheet("background-color: transparent;")  # Set container background to transparent
-        scroll_area.setWidget(container_widget)
-    
-    def show_Save(self):
-        instructions = (
-            "Data Saved to output file located at\n" +
-            "./Images/Output.csv"
-        )
-        QMessageBox.information(self, "Data Saved", instructions)
-        DBObj.SaveProcess()
-    
+    def set_background_image(self):
+        palette = QPalette()
+        background = QPixmap("./Images/BG.jpg")
+        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
+        palette.setBrush(QPalette.Background, QBrush(scaled_background))
+        self.setAutoFillBackground(True)
+        self.setPalette(palette)    
+        
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
