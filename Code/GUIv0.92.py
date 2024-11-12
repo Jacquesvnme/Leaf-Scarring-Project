@@ -65,7 +65,7 @@ class MainWindow(QWidget):
         
     def set_background_image(self):
         palette = QPalette()
-        background = QPixmap("./Images/BG.jpg")
+        background = QPixmap("./assets/images/BG.jpg")
         scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
         palette.setBrush(QPalette.Background, QBrush(scaled_background))
         self.setAutoFillBackground(True)
@@ -163,7 +163,7 @@ class MainPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/book_icon.png")
+        icon = QIcon("./assets/images/book_icon.png")
         self.instructions_button.setIcon(icon)
         self.instructions_button.setIconSize(QSize(44,44))
         self.instructions_button.clicked.connect(self.show_instructions)
@@ -374,7 +374,7 @@ class NewSamplePage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/book_icon.png")
+        icon = QIcon("./assets/images/book_icon.png")
         self.instructions_button.setIcon(icon)
         self.instructions_button.setIconSize(QSize(44, 44))
         self.instructions_button.clicked.connect(self.show_instructions)
@@ -393,7 +393,7 @@ class NewSamplePage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/home_icon.png")
+        icon = QIcon("./assets/images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
 
@@ -564,7 +564,7 @@ class DataReviewPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/book_icon.png")
+        icon = QIcon("./assets/images/book_icon.png")
         self.instructions_button.setIcon(icon)
         self.instructions_button.setIconSize(QSize(44, 44))
         self.instructions_button.clicked.connect(self.show_instructions)
@@ -583,7 +583,7 @@ class DataReviewPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/home_icon.png")
+        icon = QIcon("./assets/images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
         
@@ -847,7 +847,7 @@ class OutputPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/book_icon.png")
+        icon = QIcon("./assets/images/book_icon.png")
         self.instructions_button.setIcon(icon)
         self.instructions_button.setIconSize(QSize(44, 44))
         self.instructions_button.clicked.connect(self.show_instructions)
@@ -866,7 +866,7 @@ class OutputPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        icon = QIcon("./Images/home_icon.png")
+        icon = QIcon("./assets/images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
     
@@ -1009,7 +1009,7 @@ class OutputPage(QWidget):
     def show_Save(self):
         instructions = (
             "Data Saved to output file located at\n" +
-            "./Images/Output.csv"
+            "./assets/images/output.csv"
         )
         QMessageBox.information(self, "Data Saved", instructions)
         DBObj.SaveProcess()

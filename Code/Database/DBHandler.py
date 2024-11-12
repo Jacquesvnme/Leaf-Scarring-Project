@@ -326,7 +326,8 @@ def selectData(conn):
 
 def SaveToCSV(tableData):
     try:
-        with open('../assets/output/output.csv', 'w', newline='') as csvfile:
+        file_path = ""
+        with open('./assets/output/output.csv', 'w', newline='') as csvfile:
             fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -337,12 +338,12 @@ def SaveToCSV(tableData):
         data = [{'imagedata_id': data[0], 'imagelocation': data[1], 'imagedate': data[2], 'imagepathback':data[3], 'imagepathfront':data[4], 'imagelable':data[5], 'lamina_area':data[6], 'lamina_length':data[7], 'lamina_width':data[8], 'scar_count':data[9], 'scar_area':data[10], 'damagepercentage':data[11], 'petiole_length':data[12]}]
         
         try:
-            with open('../assets/output/output.csv', 'a', newline='') as csvfile:
+            with open('./assets/output/output.csv', 'a', newline='') as csvfile:
                 fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writerows(data)
         except:
-            print("Error in creating file.\nFile already exists")
+            print("Error in writing to file")
     print('Data fetched successfully')
 
 def SaveProcess():
@@ -354,6 +355,8 @@ def SaveProcess():
         tableData = selectData(conn)
         conn.close()
         SaveToCSV(tableData)
+
+# SaveProcess()
 
 # =========================================== TEST FEATURES STATEMENTS ===========================================
 
@@ -407,7 +410,7 @@ def SaveProcess():
 # deleteCollection(data1)
 
 #* SAVE DATA PROCESS
-SaveProcess()
+# SaveProcess()
 
 # tableData = LeafArea()
 # print('Data: ' + str(tableData))
