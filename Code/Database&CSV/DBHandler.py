@@ -1,22 +1,24 @@
 # =========================================== IMPORT STATEMENTS ===========================================
 
+import os
 import psycopg2
 import json
 import csv
-import dotenv
+from dotenv import load_dotenv 
+load_dotenv()
 
 # =========================================== TEST CONNECTION ===========================================
 
 def TestConnection():
     try:
-        conn = psycopg2.connect(database=DB_NAME,
-                                user=DB_USER,
-                                password=DB_PASS,
-                                host=DB_HOST,
-                                port=DB_PORT)
+        conn = psycopg2.connect(database=os.getenv("DB_NAME"),
+                                user=os.getenv("DB_USER"),
+                                password=os.getenv("DB_PASS"),
+                                host=os.getenv("DB_HOST"),
+                                port=os.getenv("DB_PORT"))
         print("Database connected successfully")
     except:
-        print("Database not connected successfully")
+        print("Database not connected")
         conn = 'null'
     finally:
         return conn
@@ -406,7 +408,7 @@ def SaveProcess():
 # deleteCollection(data1)
 
 #* SAVE DATA PROCESS
-# SaveProcess()
+SaveProcess()
 
 # tableData = LeafArea()
 # print('Data: ' + str(tableData))
