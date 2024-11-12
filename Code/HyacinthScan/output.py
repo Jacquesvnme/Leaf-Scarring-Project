@@ -16,10 +16,6 @@ class OutputPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle("BCASAA")
-        self.setGeometry(100, 100, 1280, 720)
-        # MainWindow.set_background_image(self)
-
         #STARTS IMAGE ARRAY
         self.images = []  #IMAGES STORED AS STRINGS/FILE PATHS
         

@@ -15,8 +15,6 @@ from database import DBHandler as DBObj
 class MainPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setGeometry(20, 20, 1280, 720)  #SETS SIZE OF APPLICATION
-        # MainWindow.set_background_image(self)
         
         #MAIN TITLE
         self.title_label = QLabel(self)

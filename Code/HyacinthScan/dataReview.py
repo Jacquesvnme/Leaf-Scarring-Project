@@ -16,10 +16,6 @@ class DataReviewPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle("BCASAA")
-        self.setGeometry(100, 100, 1280, 720)
-        # MainWindow.set_background_image(self)
-
         #DATA SET TABLE
         self.dataSets_label = QLabel(self)
         self.dataSets_label.setText("Data Sets:")

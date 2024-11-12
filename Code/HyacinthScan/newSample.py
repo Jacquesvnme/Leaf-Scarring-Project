@@ -16,10 +16,6 @@ class NewSamplePage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle("BCASAA")
-        self.setGeometry(100, 100, 1280, 720)
-        # MainWindow.set_background_image(self)
-
         # Samples Image Preview section
         self.sample_label = QLabel(self)
         self.sample_label.setText("Samples:")
