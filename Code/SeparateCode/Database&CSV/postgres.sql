@@ -1,4 +1,5 @@
--- FIXED - Jacques Van Niekerk
+-- This is used to create tables for the database
+-- Designed to work with PostgreSQL
 
 CREATE TABLE Details(
 	Details_ID Integer PRIMARY KEY,
