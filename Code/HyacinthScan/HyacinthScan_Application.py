@@ -15,6 +15,7 @@ from dataReview import DataReviewPage
 from output import OutputPage
 
 from database import DBHandler as DBObj
+from database import DBHandler as DBObj
 
 class MainWindow(QWidget):
     def __init__(self):
