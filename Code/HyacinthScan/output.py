@@ -228,6 +228,9 @@ class OutputPage(QWidget):
                     pathID = DBObj.getPathID(image_name)
                     DBObj.deleteImageNameCollection(pathID)
             self.refresh_image_preview()
+            self.display_stats_average(self.avg_results_area)
+            self.display_stats_individual(self.imageResults_area)
+            # TODO: AUTO UPDATE AVERAGE RESULTS
             
     #TITLES AND FIELDS FOR SHOWING STATS
     # Helper function to create grid layout for stats labels
