@@ -22,13 +22,7 @@ class OutputPage(QWidget):
         arr = []
         
         for i in range(counter):
-            for j in range(2):
-                arr.append(data[i][j])
-        
-        print(arr)
-        
-        # data = ImagePaths()
-        # print(data[1][1])
+            arr.append(data[i][0])
         
         self.images = arr  #IMAGES STORED AS STRINGS/FILE PATHS
         
@@ -231,6 +225,8 @@ class OutputPage(QWidget):
                 image_name = item.text()
                 if image_name in self.images:
                     self.images.remove(image_name)
+                    pathID = DBObj.getPathID(image_name)
+                    DBObj.deleteImageNameCollection(pathID)
             self.refresh_image_preview()
             
     #TITLES AND FIELDS FOR SHOWING STATS
