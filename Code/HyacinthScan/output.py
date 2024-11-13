@@ -173,7 +173,7 @@ class OutputPage(QWidget):
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
-        self.instructions_button.setGeometry#571b23
+        self.instructions_button.setGeometry(1210, 20, 50, 50)
         self.instructions_button.setStyleSheet("""
             QPushButton {
                 background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
