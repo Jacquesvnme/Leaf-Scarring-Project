@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Load the water hyacinth scar image
-image_path = r"C:\Users\Henko\Documents\MLG382\MLG_Project1\Leaf-Scarring-Project\Code\Scar_counting\Leaf_1.png"
+image_path = r"Leaf_1.png"
 image = cv2.imread(image_path)
 cv2.imshow("Original", image)
 
