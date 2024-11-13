@@ -800,7 +800,7 @@ class OutputPage(QWidget):
     #TITLES AND FIELDS FOR SHOWING STATS
     # Helper function to create grid layout for stats labels
     # Helper function to create grid layout for stats labels
-    def create_stats_grid(self):
+    def create_stats_grid(self): 
         grid_layout = QGridLayout()
 
         # Labels for each stat field
