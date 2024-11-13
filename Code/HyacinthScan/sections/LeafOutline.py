@@ -24,3 +24,5 @@ def leaf_outline(image_path):
     cv2.drawContours(image, [leaf_contour], -1, (0, 255, 0), 2)
 
     return image, leaf_contour
+
+#leaf_outline(image_pathF,image_pathB)

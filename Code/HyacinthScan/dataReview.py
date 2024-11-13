@@ -130,9 +130,6 @@ class DataReviewPage(QWidget):
         if selected_row == -1:
             QMessageBox.warning(self, "Selection Error", "Please select a data set from the table.")
             return
-        
-#'imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable',
-# #'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'
 
         # Get selected values from the table
         imagedata_id = self.dataSets_table.item(selected_row, 0).text()
