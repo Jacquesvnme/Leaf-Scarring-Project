@@ -25,6 +25,16 @@ def TestConnection():
 
 # =========================================== SELECT STATEMENTS ===========================================
 
+def getImagePaths(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT imagepathback, imagepathfront
+            FROM public.\"images\"
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows
+
 def avgLeafArea(conn):
     cur = conn.cursor()
     cur.execute(f'''
@@ -183,6 +193,16 @@ def deleteAllDetails(conn):
     cur.close()
 
 # =========================================== COLLECTION STATEMENTS ===========================================
+
+def ImagePaths():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = getImagePaths(conn)
+        conn.close()
+        return tableData
 
 def LeafArea():
     conn = TestConnection()

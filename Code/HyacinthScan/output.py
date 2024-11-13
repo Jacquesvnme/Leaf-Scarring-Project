@@ -17,7 +17,20 @@ class OutputPage(QWidget):
         super().__init__(parent)
 
         #STARTS IMAGE ARRAY
-        self.images = []  #IMAGES STORED AS STRINGS/FILE PATHS
+        counter = DBObj.rowCount()
+        data = DBObj.ImagePaths()
+        arr = []
+        
+        for i in range(counter):
+            for j in range(2):
+                arr.append(data[i][j])
+        
+        print(arr)
+        
+        # data = ImagePaths()
+        # print(data[1][1])
+        
+        self.images = arr  #IMAGES STORED AS STRINGS/FILE PATHS
         
         # Samples Image Preview section
         self.sample_label = QLabel(self)
