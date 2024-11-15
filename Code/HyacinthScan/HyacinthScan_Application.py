@@ -1,4 +1,9 @@
 import sys
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
 from PyQt5.QtWidgets import (
     QApplication, QLabel, QPushButton, QWidget, QMessageBox, QFileDialog, QListWidget, QVBoxLayout, QLineEdit,
     QDateEdit, QListWidgetItem, QStackedWidget, QTableWidget, QTableWidgetItem, QScrollArea, QHeaderView,
@@ -15,6 +20,10 @@ from dataReview import DataReviewPage
 from output import OutputPage
 
 from database import DBHandler as DBObj
+from sections import LeafOutline as LeafOut
+
+image_path = "./assets/input/ImageData.png"
+LeafOut.leaf_outline(image_path)
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -56,13 +65,13 @@ class MainWindow(QWidget):
 
     def show_new_sample_page(self):
         self.stacked_widget.setCurrentWidget(self.new_sample_page)
-        
+    
     def show_data_review_page(self):
         self.stacked_widget.setCurrentWidget(self.data_review_page)
-        
+    
     def show_output_page(self):
         self.stacked_widget.setCurrentWidget(self.output_page)
-        
+    
     def set_background_image(self):
         palette = QPalette()
         background = QPixmap("./assets/images/BG.jpg")

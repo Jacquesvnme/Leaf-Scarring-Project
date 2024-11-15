@@ -171,20 +171,30 @@ class NewSamplePage(QWidget):
         if file_dialog.exec_():
             file_paths = file_dialog.selectedFiles()
             for file_path in file_paths:
-                self.add_image_thumbnail(file_path)
+                fileFirstCut = file_path.rfind("/") + 1
+                fileSecondCut = file_path.find(".")
+                captionName = file_path[fileFirstCut:fileSecondCut]
+                
+                reply = self.imageName(captionName)
+                
+                self.add_image_thumbnail(file_path, reply)
 
-    def add_image_thumbnail(self, file_path):
+    def add_image_thumbnail(self, file_path, reply):
         pixmap = QPixmap(file_path)
         thumbnail = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         
         fileFirstCut = file_path.rfind("/") + 1
         fileSecondCut = file_path.find(".")
         captionName = file_path[fileFirstCut:fileSecondCut]
+        
+        if (reply == 65536):
+            end = "back"
+        elif (reply == 16384):
+            end = "front"
 
-        item = QListWidgetItem(QIcon(thumbnail), f"{captionName}")
+        item = QListWidgetItem(QIcon(thumbnail), f"{captionName}_{end}")
         self.image_preview_area.addItem(item)
 
-        
     """def add_data_to_db(self):
         imagelocation = self.location_input.text()
         imagedate = self.date_input.date().toString("yyyy-mm-dd")        
@@ -214,7 +224,7 @@ class NewSamplePage(QWidget):
             )        
             # Insert data into the database
             DBObj.insertCollection(*data)"""
-            
+
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
@@ -225,3 +235,9 @@ class NewSamplePage(QWidget):
             "4. Use the 'Home' button to navigate back to the main screen"
         )
         QMessageBox.information(self, "Instructions", instructions)
+
+    def imageName(self, imageName):
+        reply = QMessageBox.question(self, f"{imageName} Front or Back", "Is this the image front or back?\n" + 
+                                    "Yes = Front\nNo = Back\nDefault/Exit = Back",
+                                    QMessageBox.Yes | QMessageBox.No)
+        return reply

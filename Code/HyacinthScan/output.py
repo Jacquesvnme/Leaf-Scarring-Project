@@ -17,7 +17,14 @@ class OutputPage(QWidget):
         super().__init__(parent)
 
         #STARTS IMAGE ARRAY
-        self.images = []  #IMAGES STORED AS STRINGS/FILE PATHS
+        counter = DBObj.rowCount()
+        data = DBObj.ImagePaths()
+        arr = []
+        
+        for i in range(counter):
+            arr.append(data[i][0])
+        
+        self.images = arr  #IMAGES STORED AS STRINGS/FILE PATHS
         
         # Samples Image Preview section
         self.sample_label = QLabel(self)
@@ -160,7 +167,7 @@ class OutputPage(QWidget):
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
-        self.instructions_button.setGeometry#571b23
+        self.instructions_button.setGeometry(1210, 20, 50, 50)
         self.instructions_button.setStyleSheet("""
             QPushButton {
                 background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
@@ -218,7 +225,12 @@ class OutputPage(QWidget):
                 image_name = item.text()
                 if image_name in self.images:
                     self.images.remove(image_name)
+                    pathID = DBObj.getPathID(image_name)
+                    DBObj.deleteImageNameCollection(pathID)
             self.refresh_image_preview()
+            self.display_stats_average(self.avg_results_area)
+            self.display_stats_individual(self.imageResults_area)
+            # TODO: AUTO UPDATE AVERAGE RESULTS
             
     #TITLES AND FIELDS FOR SHOWING STATS
     # Helper function to create grid layout for stats labels

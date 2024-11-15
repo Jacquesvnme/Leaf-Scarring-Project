@@ -37,10 +37,10 @@ class DataReviewPage(QWidget):
         """)
         self.dataSets_table = QTableWidget(self)
         self.dataSets_table.setGeometry(40, 140, 1200, 510)
-        self.dataSets_table.setColumnCount(13)
+        self.dataSets_table.setColumnCount(12)
         header = self.dataSets_table.horizontalHeader()       
 
-        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'])
+        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'])
         self.dataSets_table.setSortingEnabled(True)  #CAN SORT BY COLUMN
         self.load_table_data()
 
@@ -130,24 +130,20 @@ class DataReviewPage(QWidget):
         if selected_row == -1:
             QMessageBox.warning(self, "Selection Error", "Please select a data set from the table.")
             return
-        
-#'imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable',
-# #'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'
 
         # Get selected values from the table
         imagedata_id = self.dataSets_table.item(selected_row, 0).text()
         imagelocation = self.dataSets_table.item(selected_row, 1).text()
         imagedate = self.dataSets_table.item(selected_row, 2).text()
-        imagepathback = self.dataSets_table.item(selected_row, 3).text()
-        imagepathfront = self.dataSets_table.item(selected_row, 4).text()
-        imagelable = self.dataSets_table.item(selected_row, 5).text()
-        lamina_area = self.dataSets_table.item(selected_row, 6).text()
-        lamina_length = self.dataSets_table.item(selected_row, 7).text()
-        lamina_width = self.dataSets_table.item(selected_row, 8).text()
-        scar_count = self.dataSets_table.item(selected_row, 9).text()
-        scar_area = self.dataSets_table.item(selected_row, 10).text()
-        damagepercentage = self.dataSets_table.item(selected_row, 11).text()
-        petiole_length = self.dataSets_table.item(selected_row, 12).text()
+        imagepath = self.dataSets_table.item(selected_row, 3).text()
+        imagelable = self.dataSets_table.item(selected_row, 4).text()
+        lamina_area = self.dataSets_table.item(selected_row, 5).text()
+        lamina_length = self.dataSets_table.item(selected_row, 6).text()
+        lamina_width = self.dataSets_table.item(selected_row, 7).text()
+        scar_count = self.dataSets_table.item(selected_row, 8).text()
+        scar_area = self.dataSets_table.item(selected_row, 9).text()
+        damagepercentage = self.dataSets_table.item(selected_row, 10).text()
+        petiole_length = self.dataSets_table.item(selected_row, 11).text()
         
         try:
             result = DBObj.selectCollection(imagedata_id)
