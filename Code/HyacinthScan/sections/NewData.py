@@ -105,88 +105,81 @@ def scar_counting(image_path):
 import cv2
 import numpy as np
  
-def analyze_leaf_images(front_image_path, back_image_path):
-    def process_image(image_path):
-        # Load the image
-        frame = cv2.imread(image_path)
-        if frame is None:
-            return None
- 
-        # Convert the BGR color space of the image to HSV color space
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
- 
-        # Detect the white cube for pixel-to-cm ratio
-        lower_white = np.array([0, 0, 200])  # Lower bound for white
-        upper_white = np.array([180, 55, 255])  # Upper bound for white
-        cube_mask = cv2.inRange(hsv, lower_white, upper_white)
-        contours, _ = cv2.findContours(cube_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
- 
-        if len(contours) == 0:
-            return None  # Return None if no cube found for calibration
- 
-        # Assuming the largest white contour is the cube
-        cube_contour = max(contours, key=cv2.contourArea)
-        x, y, w, h = cv2.boundingRect(cube_contour)
- 
-        if w == 0 or h == 0:
-            return None
- 
-        # Pixel-to-cm ratio calculation
-        cube_size_in_pixels = max(w, h)  # Taking the larger side
-        pixel_to_cm_ratio = cube_size_in_pixels / 2.0  # 2 cm cube
- 
-        # Define color ranges for healthy and scar areas
-        lower_Healthy = np.array([40, 100, 60])
-        upper_Healthy = np.array([80, 255, 180])
-        lower_Unhealthy = np.array([15, 100, 100])
-        upper_Unhealthy = np.array([35, 255, 255])
-        lower_Scar = np.array([0, 50, 50])
-        upper_Scar = np.array([20, 150, 200])
- 
-        # Masks for healthy (green), unhealthy (yellow), and scar (brown)
-        green_mask = cv2.inRange(hsv, lower_Healthy, upper_Healthy)
-        yellow_mask = cv2.inRange(hsv, lower_Unhealthy, upper_Unhealthy)
-        brown_mask = cv2.inRange(hsv, lower_Scar, upper_Scar)
- 
-        # Combine masks to detect the entire leaf area (including scarred regions)
-        leaf_mask = cv2.bitwise_or(green_mask, brown_mask)
-        leaf_mask = cv2.bitwise_or(leaf_mask, yellow_mask)
- 
-        # Calculate areas in pixels
-        total_leaf_pixels = cv2.countNonZero(leaf_mask)
-        scar_pixels = cv2.countNonZero(brown_mask)
- 
-        # Convert areas to cm² using the pixel-to-cm ratio
-        lamina_area_cm2 = total_leaf_pixels / (pixel_to_cm_ratio ** 2)
-        scar_area_cm2 = scar_pixels / (pixel_to_cm_ratio ** 2)
- 
-        # Calculate damage percentage
-        damage_percentage = (scar_area_cm2 / lamina_area_cm2) * 100 if lamina_area_cm2 > 0 else 0
- 
-        # Leaf length and width in cm
-        x_leaf, y_leaf, w_leaf, h_leaf = cv2.boundingRect(leaf_mask)
-        lamina_length_cm = h_leaf / pixel_to_cm_ratio
-        lamina_width_cm = w_leaf / pixel_to_cm_ratio
- 
-        # Create and return the dictionary with the rounded values
-        return {
-            "lamina_area": round(lamina_area_cm2, 2),
-            "lamina_length": round(lamina_length_cm, 2),
-            "lamina_width": round(lamina_width_cm, 2),
-            "scar_count": 0,  
-            "scar_area": round(scar_area_cm2, 2),
-            "damagepercentage": round(damage_percentage, 2)
-        }
- 
-    # Process front and back images
-    front_data = process_image(front_image_path)
-    back_data = process_image(back_image_path)
- 
-    return front_data, back_data
+def process_image(image_path):
+    # Load the image
+    frame = cv2.imread(image_path)
+    if frame is None:
+        return None
+
+    # Convert the BGR color space of the image to HSV color space
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # Detect the white cube for pixel-to-cm ratio
+    lower_white = np.array([0, 0, 200])  # Lower bound for white
+    upper_white = np.array([180, 55, 255])  # Upper bound for white
+    cube_mask = cv2.inRange(hsv, lower_white, upper_white)
+    contours, _ = cv2.findContours(cube_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    if len(contours) == 0:
+        return None  # Return None if no cube found for calibration
+
+    # Assuming the largest white contour is the cube
+    cube_contour = max(contours, key=cv2.contourArea)
+    x, y, w, h = cv2.boundingRect(cube_contour)
+
+    if w == 0 or h == 0:
+        return None
+
+    # Pixel-to-cm ratio calculation
+    cube_size_in_pixels = max(w, h)  # Taking the larger side
+    pixel_to_cm_ratio = cube_size_in_pixels / 2.0  # 2 cm cube
+
+    # Define color ranges for healthy and scar areas
+    lower_Healthy = np.array([40, 100, 60])
+    upper_Healthy = np.array([80, 255, 180])
+    lower_Unhealthy = np.array([15, 100, 100])
+    upper_Unhealthy = np.array([35, 255, 255])
+    lower_Scar = np.array([0, 50, 50])
+    upper_Scar = np.array([20, 150, 200])
+
+    # Masks for healthy (green), unhealthy (yellow), and scar (brown)
+    green_mask = cv2.inRange(hsv, lower_Healthy, upper_Healthy)
+    yellow_mask = cv2.inRange(hsv, lower_Unhealthy, upper_Unhealthy)
+    brown_mask = cv2.inRange(hsv, lower_Scar, upper_Scar)
+
+    # Combine masks to detect the entire leaf area (including scarred regions)
+    leaf_mask = cv2.bitwise_or(green_mask, brown_mask)
+    leaf_mask = cv2.bitwise_or(leaf_mask, yellow_mask)
+
+    # Calculate areas in pixels
+    total_leaf_pixels = cv2.countNonZero(leaf_mask)
+    scar_pixels = cv2.countNonZero(brown_mask)
+
+    # Convert areas to cm² using the pixel-to-cm ratio
+    lamina_area_cm2 = total_leaf_pixels / (pixel_to_cm_ratio ** 2)
+    scar_area_cm2 = scar_pixels / (pixel_to_cm_ratio ** 2)
+
+    # Calculate damage percentage
+    damage_percentage = (scar_area_cm2 / lamina_area_cm2) * 100 if lamina_area_cm2 > 0 else 0
+
+    # Leaf length and width in cm
+    x_leaf, y_leaf, w_leaf, h_leaf = cv2.boundingRect(leaf_mask)
+    lamina_length_cm = h_leaf / pixel_to_cm_ratio
+    lamina_width_cm = w_leaf / pixel_to_cm_ratio
+
+    # Create and return the dictionary with the rounded values
+    return {
+        "lamina_area": round(lamina_area_cm2, 2),
+        "lamina_length": round(lamina_length_cm, 2),
+        "lamina_width": round(lamina_width_cm, 2),
+        "scar_count": 0,  
+        "scar_area": round(scar_area_cm2, 2),
+        "damagepercentage": round(damage_percentage, 2)
+    }
 
 
-def analyse_image(image_path_front, image_path_back):
-    image, leaf_contour = leaf_outline(image_path_front)
+def analyse_image(image_path):
+    image, leaf_contour = leaf_outline(image_path)
     import cv2
     import matplotlib.pyplot as plt
     # Display the segmented image
@@ -195,21 +188,9 @@ def analyse_image(image_path_front, image_path_back):
     plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     plt.axis('off')
 
-    image, leaf_contour = leaf_outline(image_path_back)
-    import cv2
-    import matplotlib.pyplot as plt
-    # Display the segmented image
-    plt.subplot(1, 2, 2)
-    plt.title('Leaf Outline Back')
-    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-    plt.axis('off')
+    output = process_image(image_path)
 
-    output_front, output_back = analyze_leaf_images(image_path_front, image_path_back)
+    scar_count = scar_counting(image_path)
+    output["scar_count"] = scar_count
 
-    scar_count = scar_counting(image_path_front)
-    output_front["scar_count"] = scar_count
-
-    scar_count = scar_counting(image_path_back)
-    output_back["scar_count"] = scar_count
-
-    return output_front, output_back
+    return output
