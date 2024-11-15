@@ -839,7 +839,7 @@ class OutputPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        self.save_button.clicked.connect(self.show_Save);
+        self.save_button.clicked.connect(self.show_Save)
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
@@ -945,6 +945,8 @@ class OutputPage(QWidget):
                 label.setStyleSheet("""
                     QLabel {
                         font-family: 'Inter';
+                        .0
+                                    .
                         font-weight: 500;
                         font-size: 18px;
                     }
