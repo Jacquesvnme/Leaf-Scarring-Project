@@ -128,8 +128,6 @@ def filter_image(image_path):
             if w > 0 and h > 0:
                 cube_size_in_pixels = max(w, h)  # Taking the larger side
                 pixel_to_cm_ratio = cube_size_in_pixels / 2.0  # 2 cm cube
-                # print(f'Image: {image_path}')
-                # print(f'Pixel-to-cm Ratio: {pixel_to_cm_ratio:.2f} pixels/cm')
 
                 # Calculate cube area in pixels and cm²
                 cube_area_pixels = w * h
@@ -138,9 +136,6 @@ def filter_image(image_path):
 
                 # Calculate the percentage error
                 cube_area_percentage = (cube_area_cm2 / actual_cube_area_cm2) * 100
-                # print(f'Calculated Cube Area: {cube_area_cm2:.2f} cm²')
-                # print(f'Actual Cube Area: {actual_cube_area_cm2} cm²')
-                # print(f'Cube Area Percentage (compared to actual area): {cube_area_percentage:.2f}%')
 
                 # Healthy leaf (green)
                 lower_Healthy = np.array([40, 100, 60])
@@ -181,21 +176,10 @@ def filter_image(image_path):
                 unhealthy_percentage = (dying_area_cm2 / leaf_area_cm2) * 100
                 healthy_percentage = (healthy_area_cm2 / leaf_area_cm2) * 100
 
-                # Print the results
-                # print(f'Total Leaf Area (Healthy + Dying + Scars): {leaf_area_cm2:.2f} cm²')
-                # print(f'Scar Area: {scar_area_cm2:.2f} cm²')
-                # print(f'Dying Area: {dying_area_cm2:.2f} cm²')
-                # print(f'Healthy Area: {healthy_area_cm2:.2f} cm²')
-                # print(f'Damage Percentage: {damage_percentage:.2f}%')
-                # print(f'Unhealthy (Yellow) Percentage: {unhealthy_percentage:.2f}%')
-                # print(f'Healthy (Green) Percentage: {healthy_percentage:.2f}%')
-
                 # Calculate Leaf length and width
                 x_leaf, y_leaf, w_leaf, h_leaf = cv2.boundingRect(leaf_mask)
                 leaf_length_cm = h_leaf / pixel_to_cm_ratio
                 leaf_width_cm = w_leaf / pixel_to_cm_ratio
-                # print(f'Leaf Length: {leaf_length_cm:.2f} cm')
-                # print(f'Leaf Width: {leaf_width_cm:.2f} cm')
 
                 # Resize image for display
                 scale_percent = 50  # percent of original size
@@ -229,16 +213,9 @@ def filter_image(image_path):
                 # Combine the rows vertically
                 final_display = cv2.vconcat([row1, row2])
 
-                # Display the combined image for each image in the list
-                # cv2.imshow(f'Leaf Analysis ({image_path})', final_display)
-
-                # Wait for a key press to move to the next image
-                # cv2.waitKey(0)
-
-                # Close the window before moving to the next image
-                # cv2.destroyAllWindows()
-
-                return_list = {"lamina_area" : round(leaf_area_cm2, 2), "lamina_length" : round(leaf_length_cm, 2), "lamina_width" : round(leaf_width_cm, 2), "scar_count" : 0, "scar_area" : round(scar_area_cm2, 2), "damagepercentage" : round(damage_percentage, 2)}
+                return_list = {"lamina_area" : round(leaf_area_cm2, 2), "lamina_length" : round(leaf_length_cm, 2), 
+                               "lamina_width" : round(leaf_width_cm, 2), "scar_count" : 0, "scar_area" : round(scar_area_cm2, 2), 
+                               "damagepercentage" : round(damage_percentage, 2)}
 
         else:
             print(f"Cube not found for pixel-to-cm ratio in {image_path}!")
