@@ -10,6 +10,11 @@ import psycopg2
 from psycopg2 import sql
 
 from database import DBHandler as DBObj
+from sections import NewData as DataValidation 
+
+counter = 0
+labelNames = []
+filePath = []
 
 #NEW SAMPLE PAGE
 class NewSamplePage(QWidget):
@@ -125,7 +130,7 @@ class NewSamplePage(QWidget):
                 color: #000000;
                 }                           
         """)
-        #self.add_data_to_db()
+        self.next_button.clicked.connect(self.add_data_to_db)
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
@@ -164,6 +169,20 @@ class NewSamplePage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
 
+    
+
+    def addCounter(self):
+        global counter
+        counter += 1
+
+    def addImageLabel(self,data):
+        global labelNames
+        labelNames.append(data)
+
+    def addImagePath(self,data):
+        global filePath
+        filePath.append(data)
+
     def open_image_dialog(self):
         file_dialog = QFileDialog(self)
         file_dialog.setFileMode(QFileDialog.ExistingFiles)
@@ -171,12 +190,19 @@ class NewSamplePage(QWidget):
         if file_dialog.exec_():
             file_paths = file_dialog.selectedFiles()
             for file_path in file_paths:
+                self.addCounter()
+                
+                path_length = len(file_path)
+                cut = file_path.find("/assets")
+                custom_file_path = f".{file_path[cut:path_length]}"
+                self.addImagePath(custom_file_path)
+                
                 fileFirstCut = file_path.rfind("/") + 1
                 fileSecondCut = file_path.find(".")
                 captionName = file_path[fileFirstCut:fileSecondCut]
+                labelNames.append(captionName)
                 
                 reply = self.imageName(captionName)
-                
                 self.add_image_thumbnail(file_path, reply)
 
     def add_image_thumbnail(self, file_path, reply):
@@ -186,6 +212,7 @@ class NewSamplePage(QWidget):
         fileFirstCut = file_path.rfind("/") + 1
         fileSecondCut = file_path.find(".")
         captionName = file_path[fileFirstCut:fileSecondCut]
+        self.addImageLabel(captionName)
         
         if (reply == 65536):
             end = "back"
@@ -195,35 +222,36 @@ class NewSamplePage(QWidget):
         item = QListWidgetItem(QIcon(thumbnail), f"{captionName}_{end}")
         self.image_preview_area.addItem(item)
 
-    """def add_data_to_db(self):
+    def add_data_to_db(self):
+        image_ID = DBObj.selectID()[0][0]
         imagelocation = self.location_input.text()
-        imagedate = self.date_input.date().toString("yyyy-mm-dd")        
+        imagedate = self.date_input.date().toString("yyyy-MM-dd")  
         
-        #data1 = generate_imagedata_id() #function to make a new imagedataID, based on the newest imagedataID + 1#
-        data2 = imagelocation
-        data3 = imagedate
-                
-        for image_path in self.get_image_paths():
-            data4 = FTObj.image_path
-            data5 = FTObj. image_path
+        for i in range(counter):
+            image_ID += 1
             
-            data = (
-                #data1,
-                data2,
-                data3,
-                data4,
-                data5,
-                FTObj.labeled_resized_leaf.get('image_label', ''),  # Label if available
-                FTObj.leaf_area_cm2.get('lamina_area', 0),
-                FTObj.leaf_length_cm.get('lamina_length', 0),
-                FTObj.leaf_width_cm.get('lamina_width', 0),
-                #count.get('scar_count', 0),
-                FTObj.scar_area_cm2.get('scar_area', 0),
-                FTObj.damage_percentage.get('damage_percentage', 0),
-                #.get('petiole_length', 0)
-            )        
-            # Insert data into the database
-            DBObj.insertCollection(*data)"""
+            arr = DataValidation.analyse_image(filePath[i]);
+            
+            print(f"SAVING TO DATABASE\n" +
+                f"---------------------------\n" +
+                f"Image ID: {image_ID}\n" +
+                f"Image Location: {imagelocation}\n" +
+                f"Image Date: {imagedate}\n" +
+                f"Image ID: {image_ID}\n" +
+                f"Image ID: {image_ID}\n" +
+                f"File Path: {filePath[i]}\n" +
+                f"Image ID: {image_ID}\n" +
+                f"Image ID: {image_ID}\n" +
+                f"Label Names: {labelNames[i]}\n" +
+                f"Lamina Area: {arr["lamina_area"]}\n" +
+                f"Lamina Length: {arr["lamina_length"]}\n" +
+                f"Lamina Width: {arr["lamina_width"]}\n" +
+                f"Scar Count: {arr["scar_count"]}\n" +
+                f"Scar Area: {arr["scar_area"]}\n" +
+                f"Damage Percentage: {arr["damagepercentage"]}\n" +
+                f"---------------------------\n")
+
+            DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
 
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):

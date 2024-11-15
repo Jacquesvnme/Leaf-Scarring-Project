@@ -20,10 +20,11 @@ from dataReview import DataReviewPage
 from output import OutputPage
 
 from database import DBHandler as DBObj
-from sections import LeafOutline as LeafOut
+from sections import NewData as DataValidation 
 
-image_path = "./assets/input/ImageData.png"
-LeafOut.leaf_outline(image_path)
+counter = 0
+filePath = []
+labelNames = []
 
 class MainWindow(QWidget):
     def __init__(self):

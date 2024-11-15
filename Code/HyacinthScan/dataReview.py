@@ -37,10 +37,10 @@ class DataReviewPage(QWidget):
         """)
         self.dataSets_table = QTableWidget(self)
         self.dataSets_table.setGeometry(40, 140, 1200, 510)
-        self.dataSets_table.setColumnCount(12)
+        self.dataSets_table.setColumnCount(11)
         header = self.dataSets_table.horizontalHeader()       
 
-        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'])
+        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage'])
         self.dataSets_table.setSortingEnabled(True)  #CAN SORT BY COLUMN
         self.load_table_data()
 
@@ -143,7 +143,6 @@ class DataReviewPage(QWidget):
         scar_count = self.dataSets_table.item(selected_row, 8).text()
         scar_area = self.dataSets_table.item(selected_row, 9).text()
         damagepercentage = self.dataSets_table.item(selected_row, 10).text()
-        petiole_length = self.dataSets_table.item(selected_row, 11).text()
         
         try:
             result = DBObj.selectCollection(imagedata_id)

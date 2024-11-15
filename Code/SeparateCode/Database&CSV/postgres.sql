@@ -22,8 +22,7 @@ CREATE TABLE ImageData(
 	Lamina_Width DOUBLE PRECISION,
 	Scar_Count Integer,
 	Scar_Area DOUBLE PRECISION,
-	DamagePercentage DOUBLE PRECISION,
-	Petiole_Length DOUBLE PRECISION
+	DamagePercentage DOUBLE PRECISION
 );
 
 ALTER TABLE Images
@@ -50,12 +49,12 @@ VALUES
 	(5,5,'./image5.png'),
 	(6,6,'./image6.png');
 
-INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage,Petiole_Length)
+INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage)
 VALUES
-	(1,1,'Image1_front',160,10,16,4,20,0.125,4),
-	(2,2,'Image1_back',216,18,12,17,25,0.116,5),
-	(3,3,'Image2_front',240,15,16,8,35,0.146,7),
-	(4,4,'Image2_back',200,10,20,15,23,0.115,8),
-	(5,5,'Image3_front',357,17,21,7,34,0.095,5),
-	(6,6,'Image3_back',330,18,27,5,39,0.057,9);
+	(1,1,'Image1_front',160,10,16,4,20,0.125),
+	(2,2,'Image1_back',216,18,12,17,25,0.116),
+	(3,3,'Image2_front',240,15,16,8,35,0.146),
+	(4,4,'Image2_back',200,10,20,15,23,0.115),
+	(5,5,'Image3_front',357,17,21,7,34,0.095),
+	(6,6,'Image3_back',330,18,27,5,39,0.057);
 	-- area,length & width are of cm & cm^2
