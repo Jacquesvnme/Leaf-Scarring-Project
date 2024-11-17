@@ -25,6 +25,17 @@ def TestConnection():
 
 # =========================================== SELECT STATEMENTS ===========================================
 
+def getIndividualStats(conn, image_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage
+            FROM public.\"imagedata\"
+                WHERE image_id = {image_id}
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0] if rows else None
+
 def selectMaxID(conn):
     cur = conn.cursor()
     cur.execute(f'''
@@ -223,6 +234,17 @@ def deleteAllDetails(conn):
     cur.close()
 
 # =========================================== COLLECTION STATEMENTS ===========================================
+
+def getIndividualStatsCollection(image_id):
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+        return None
+    else:
+        print('Connection String Found')
+        tableData = getIndividualStats(conn, image_id)
+        conn.close()
+        return tableData
 
 def getPathID(data):
     conn = TestConnection()
