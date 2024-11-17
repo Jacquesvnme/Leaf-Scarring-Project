@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import (
     QApplication, QLabel, QPushButton, QWidget, QMessageBox, QFileDialog, QListWidget, QVBoxLayout, QLineEdit,
     QDateEdit, QListWidgetItem, QStackedWidget, QTableWidget, QTableWidgetItem, QScrollArea, QHeaderView,
-    QWidget, QGridLayout)
+    QWidget, QGridLayout, QListView)
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush, QIcon
 from PyQt5.QtCore import Qt, QDate, QSize
 
@@ -43,6 +43,10 @@ class NewSamplePage(QWidget):
         self.image_preview_area = QListWidget(self)
         self.image_preview_area.setGeometry(40, 60, 680, 580)
         self.image_preview_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.image_preview_area.setViewMode(QListView.IconMode)         # Set to Icon Mode
+        self.image_preview_area.setIconSize(QSize(150, 150))            # Set larger icon size for thumbnails
+        self.image_preview_area.setSpacing(10)                          # Add spacing between icons
+        self.image_preview_area.setResizeMode(QListWidget.Adjust)       # Adjust layout to fit contents
         self.image_preview_area.setStyleSheet("""
             QListWidget {
                 background-color: rgb(250, 250, 250);
@@ -225,42 +229,42 @@ class NewSamplePage(QWidget):
     def add_data_to_db(self):
         image_ID = DBObj.selectID()[0][0]
         imagelocation = self.location_input.text()
-        imagedate = self.date_input.date().toString("yyyy-MM-dd")  
-        
-        for i in range(counter):
-            image_ID += 1
-            
-            arr = DataValidation.analyse_image(filePath[i]);
-            
-            print(f"SAVING TO DATABASE\n" +
-                f"---------------------------\n" +
-                f"Image ID: {image_ID}\n" +
-                f"Image Location: {imagelocation}\n" +
-                f"Image Date: {imagedate}\n" +
-                f"Image ID: {image_ID}\n" +
-                f"Image ID: {image_ID}\n" +
-                f"File Path: {filePath[i]}\n" +
-                f"Image ID: {image_ID}\n" +
-                f"Image ID: {image_ID}\n" +
-                f"Label Names: {labelNames[i]}\n" +
-                f"Lamina Area: {arr["lamina_area"]}\n" +
-                f"Lamina Length: {arr["lamina_length"]}\n" +
-                f"Lamina Width: {arr["lamina_width"]}\n" +
-                f"Scar Count: {arr["scar_count"]}\n" +
-                f"Scar Area: {arr["scar_area"]}\n" +
-                f"Damage Percentage: {arr["damagepercentage"]}\n" +
-                f"---------------------------\n")
+        imagedate = self.date_input.date().toString("yyyy-MM-dd") 
 
-            DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
+        
+        if counter == 0:
+            QMessageBox.information(self, "Error Message", "Image must be imported")
+        elif imagelocation == "" or imagelocation == None:
+            QMessageBox.information(self, "Error Message", "Location must be entered")
+        elif imagedate == "" or imagedate == None:
+            QMessageBox.information(self, "Error Message", "Date must be entered")
+        else:
+            for i in range(counter):
+                image_ID += 1
+                arr = DataValidation.analyse_image(filePath[i]);
+                
+                if ( arr["lamina_area"] == "" or arr["lamina_area"] == None or
+                    arr["lamina_length"] == "" or arr["lamina_length"] == None or
+                    arr["lamina_width"] == "" or arr["lamina_width"] == None or
+                    arr["scar_count"] == "" or arr["scar_count"] == None or
+                    arr["scar_area"] == "" or arr["scar_area"] == None or
+                    arr["damagepercentage"] == "" or arr["damagepercentage"] == None ):
+                    QMessageBox.information(self, "Error Message", "Image Processing Failed")
+                else:
+                    try:
+                        DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
+                    except:
+                        QMessageBox.information(self, "Error Message", "Adding to database failed")
 
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for New Sample Page:\n\n"
-            "1. Use the 'Add Images' button to upload image files (.png, .jpg).\n"
-            "2. Fill out the location and date fields.\n"
-            "3. Click 'Next' to proceed to the next step.\n"
-            "4. Use the 'Home' button to navigate back to the main screen"
+            "<h3>Instructions for New Sample Page:</h3>"
+            "<ol type='1'><li>Use the 'Add Images' button to upload image files (.png, .jpg).</li>"
+            "<li>Follow on screen prompts and pop-ups as needed</li>"
+            "<li>Fill out the location and date fields.</li>"
+            "<li>Click 'Next' to proceed to the next step.</li>"
+            "<li>Use the 'Home' button to navigate back to the main screen</li></ol>"
         )
         QMessageBox.information(self, "Instructions", instructions)
 

@@ -354,11 +354,11 @@ class OutputPage(QWidget):
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for Output Page:\n\n"
-            "1. Click on the images of the sample(s) you wish to remove.\n"
-            "   (if none are needed skip to step 3)\n"
-            "2. Click on the 'Remove selected' button to remove images from the dataset.\n"
-            "3. Click on the 'Save Data' button to save the data as an Excel file\n"
-            "4. Use the 'Home' button to navigate back to the main screen"
+            "<h3>Instructions for Output Page:</h3>"
+            "<ul type=none><li>Click on the images of the sample(s) you wish to remove.<br>"
+            "   (if none are needed skip to step 3)</li>"
+            "<li>Click on the 'Remove selected' button to remove images from the dataset.</li>"
+            "<li>Click on the 'Save Data' button to save the data as an CSV file.</li>"
+            "<li>Use the 'Home' button to navigate back to the main screen.</li></ul>"
         )
         QMessageBox.information(self, "Instructions", instructions)

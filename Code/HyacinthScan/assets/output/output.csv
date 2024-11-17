@@ -5,3 +5,4 @@ imagedata_id,imagelocation,imagedate,imagepath,imagelable,lamina_area,lamina_len
 4,Ekurhuleni,2024-03-24,./image4.png,Image2_back,200.0,10.0,20.0,15,23.0,0.115
 5,Tshwane,2024-08-10,./image5.png,Image3_front,357.0,17.0,21.0,7,34.0,0.095
 6,Benoni,2024-09-26,./image6.png,Image3_back,330.0,18.0,27.0,5,39.0,0.057
+7,Benoni,2024-11-12,./assets/input/ImageData.png,ImageData,19.31,10.53,10.21,33,0.03,0.14

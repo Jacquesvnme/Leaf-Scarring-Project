@@ -435,56 +435,24 @@ def SaveProcess():
         conn.close()
         SaveToCSV(tableData)
 
-# =========================================== TEST FEATURES STATEMENTS ===========================================
 
-#* SELECT
-# imagedata_id = "5";
-# tableData = selectCollection(imagedata_id)
-# print(tableData)
 
-#* INSERT
-# data1 = 7
-# data2 = 'Johannesburg'
-# data3 = '2024-01-01'
-# data4 = 7
-# data5 = 7
-# data6 = './image7_back.png'
-# data7 = './image7_front.png'
-# data8 = 7
-# data9 = 7
-# data10 = 'image7'
-# data11 = 278
-# data12 = 14
-# data13 = 15
-# data14 = 14
-# data15 = 26
-# data16 = 0.146
-# data17 = 7
-# insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
 
-#* UPDATE
-# data1 = 7
-# data2 = 'Joburg'
-# data3 = '2024-01-01'
-# data4 = 7
-# data5 = 7
-# data6 = './image7_back333.png'
-# data7 = './image7_front333.png'
-# data8 = 7
-# data9 = 7
-# data10 = 'image744'
-# data11 = 278
-# data12 = 14
-# data13 = 15
-# data14 = 14
-# data15 = 26
-# data16 = 0.146
-# data17 = 7
-# updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+# Possible implementation
 
-#* DELETE
-# data1 = 7
-# deleteCollection(data1)
+# def selectID():
+#     conn = TestConnection()
+#     if conn == 'null':
+#         print('No Connection String')
+#     elif conn != 'null':
+#         print('Connection String Found')
+#         tableData = generalized_statement(conn,"SELECT max(details_id) FROM public.details;")
+#         conn.close()
+#         return tableData
 
-#* SAVE DATA PROCESS
-# SaveProcess()
+# def generalized_statement(conn,sqlQuery):
+#     cur = conn.cursor()
+#     cur.execute(f"{sqlQuery}")
+#     rows = cur.fetchall()
+#     cur.close()
+#     return rows

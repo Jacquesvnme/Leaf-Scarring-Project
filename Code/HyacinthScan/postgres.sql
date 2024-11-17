@@ -58,3 +58,15 @@ VALUES
 	(5,5,'Image3_front',357,17,21,7,34,0.095),
 	(6,6,'Image3_back',330,18,27,5,39,0.057);
 	-- area,length & width are of cm & cm^2
+
+-- For testing purposes only
+CREATE VIEW viewData
+AS
+	SELECT imagedata_id, imagelocation, imagedate,
+			imagepath, imagelable, lamina_area, lamina_length,
+			lamina_width, scar_count, scar_area, damagepercentage
+		FROM public.details
+			FULL JOIN public.images ON public.details.details_id = public.images.details_id
+			FULL JOIN public.imagedata ON public.images.image_id = public.imagedata.image_id;
+
+SELECT * FROM viewData

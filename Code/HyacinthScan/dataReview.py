@@ -158,13 +158,10 @@ class DataReviewPage(QWidget):
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for Data Review Page:\n\n"
-            "1. Click on the dataset from the list you want to review.\n"
-            "2. Click on the 'Select Sample' button.\n"
-            "3. Click on the 'Next' button to continue to the next page.\n"
-            "4. Click on the 'Home' button to return to the main screen.\n\n"
-            "Please note that the datasets can be sorted by date and\n"
-            " by location. To do so click on the column header\n"
-            "(Date or Location) to sort decendingly or accendingly"
+            "<h3>Instructions for Data Review Page:</h3>"
+            "<ol type='1'><li>Click on the dataset from the list you want to review.</li>"
+            "<li>Click on the 'Select Sample' button.</li>"
+            "<li>Click on the 'Next' button to continue to the next page.</li>"
+            "<li>lick on the 'Home' button to return to the main screen.</li></ol>"
         )
         QMessageBox.information(self, "Instructions", instructions)

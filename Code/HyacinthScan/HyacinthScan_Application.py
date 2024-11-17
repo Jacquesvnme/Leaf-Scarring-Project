@@ -22,10 +22,6 @@ from output import OutputPage
 from database import DBHandler as DBObj
 from sections import NewData as DataValidation 
 
-counter = 0
-filePath = []
-labelNames = []
-
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
