@@ -118,7 +118,7 @@ class MainPage(QWidget):
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "<h2>Instructions for Using the Application:<br></h2>"
+            "<h3>Instructions for Using the Application:</h3>"
             "<ol type='1'><li>Click 'New Sample' to input new data samples.</li>"
             "<li>Click 'Data Review' to review existing data and analysis.</li>"
             "<li>Credits are listed at the bottom, featuring project contributors.</li></ol>"

@@ -72,7 +72,7 @@ class MainWindow(QWidget):
     def set_background_image(self):
         palette = QPalette()
         background = QPixmap("./assets/images/BG.jpg")
-        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
+        scaled_background = background.scaled(QSize(1300, 780), Qt.KeepAspectRatioByExpanding)
         palette.setBrush(QPalette.Background, QBrush(scaled_background))
         self.setAutoFillBackground(True)
         self.setPalette(palette)
