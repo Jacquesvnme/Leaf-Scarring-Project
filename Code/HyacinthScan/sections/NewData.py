@@ -94,7 +94,7 @@ def process_image(image_path):
 
     # Pixel-to-cm ratio calculation
     cube_size_in_pixels = max(w, h)  # Taking the larger side
-    pixel_to_cm_ratio = cube_size_in_pixels / 2.0  # 2 cm cube
+    pixel_to_cm_ratio = cube_size_in_pixels / 5.0  # 5 cm cube
 
     # Define color ranges for healthy and scar areas
     lower_Healthy = np.array([40, 100, 60])
