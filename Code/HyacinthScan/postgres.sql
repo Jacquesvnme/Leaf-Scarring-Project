@@ -10,7 +10,7 @@ CREATE TABLE Details(
 CREATE TABLE Images(
 	Image_ID SERIAL PRIMARY KEY,
 	Details_ID Integer UNIQUE,
-	ImagePath VARCHAR (100)  UNIQUE
+	ImagePath VARCHAR (100) UNIQUE
 );
 
 CREATE TABLE ImageData(

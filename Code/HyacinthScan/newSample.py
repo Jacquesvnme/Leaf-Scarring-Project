@@ -241,39 +241,27 @@ class NewSamplePage(QWidget):
         fileFirstCut = file_path.rfind("/") + 1
         fileSecondCut = file_path.find(".")
         captionName = file_path[fileFirstCut:fileSecondCut]
-        self.addImageLabel(captionName)
         
         if (reply == 65536):
             end = "back"
         elif (reply == 16384):
             end = "front"
+        
+        self.addImageLabel(f"{captionName}_{end}")
 
         item = QListWidgetItem(QIcon(thumbnail), f"{captionName}_{end}")
         self.image_preview_area.addItem(item)
 
     def validate_data(self):
-        # if counter == 0:
-        #     QMessageBox.warning(self, "Validation Error", "Please add at least one image.")
-        #     return
-        
-        # if not self.location_input.text().strip():
-        #     QMessageBox.warning(self, "Validation Error", "Please enter a location.")
-        #     return
-        
-        # if not self.date_input.date().toString("yyyy-MM-dd").strip():
-        #     QMessageBox.warning(self, "Validation Error", "Please add at least one image.")
-        #     return
-        
-        image_ID = DBObj.selectID()[0][0]
         imagelocation = self.location_input.text()
         imagedate = self.date_input.date().toString("yyyy-MM-dd") 
 
         if counter == 0:
-            QMessageBox.information(self, "Error Message", "Image must be imported")
+            QMessageBox.warning(self, "Error Message", "Image must be imported")
         elif imagelocation == "" or imagelocation == None:
-            QMessageBox.information(self, "Error Message", "Location must be entered")
+            QMessageBox.warning(self, "Error Message", "Location must be entered")
         elif imagedate == "" or imagedate == None:
-            QMessageBox.information(self, "Error Message", "Date must be entered")
+            QMessageBox.warning(self, "Error Message", "Date must be entered")
         else:
             # If validation passes, hide check button and show next button
             self.check_data_button.hide()
@@ -286,13 +274,6 @@ class NewSamplePage(QWidget):
         imagelocation = self.location_input.text()
         imagedate = self.date_input.date().toString("yyyy-MM-dd") 
 
-        # if counter == 0:
-        #     QMessageBox.information(self, "Error Message", "Image must be imported")
-        # elif imagelocation == "" or imagelocation == None:
-        #     QMessageBox.information(self, "Error Message", "Location must be entered")
-        # elif imagedate == "" or imagedate == None:
-        #     QMessageBox.information(self, "Error Message", "Date must be entered")
-        # else:
         for i in range(counter):
             image_ID += 1
             arr = DataValidation.analyse_image(filePath[i]);
@@ -305,14 +286,11 @@ class NewSamplePage(QWidget):
                 arr["damagepercentage"] == "" or arr["damagepercentage"] == None ):
                 QMessageBox.information(self, "Error Message", "Image Processing Failed")
             else:
-                print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
-                #DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
-                
-                # try:
-                #     DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
-                # except:
-                #     print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
-                #     QMessageBox.information(self, "Error Message", "Adding to database failed")
+                try:
+                    DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
+                except:
+                    print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
+                    QMessageBox.information(self, "Error Message", "Adding to database failed")
 
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):

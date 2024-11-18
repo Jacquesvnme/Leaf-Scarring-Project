@@ -215,6 +215,7 @@ class OutputPage(QWidget):
         self.refresh_button.setIcon(icon)
         self.refresh_button.setIconSize(QSize(44, 44))
         self.refresh_button.clicked.connect(self.refresh_image_preview)
+        self.refresh_button.clicked.connect(self.update_average_stats)
     
     #REFRESHES IMAGE PREVIEW AREA    
     def refresh_image_preview(self):
@@ -377,6 +378,9 @@ class OutputPage(QWidget):
             grid_layout_average.addWidget(label, row, col)
 
         return grid_layout_average
+
+    def update_average_stats(self, item):
+        self.display_stats_average(self.avg_results_area)
 
 # Displays stats layout in a scroll area with a transparent background
     def display_stats_average(self, scroll_area):
