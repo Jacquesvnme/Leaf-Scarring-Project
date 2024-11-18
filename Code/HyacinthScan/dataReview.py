@@ -55,6 +55,9 @@ class DataReviewPage(QWidget):
                 border-radius: 10px;
                 color: #000000;
             }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
         """)
         self.selectSample_button.clicked.connect(self.fetch_selected_sample)
         
@@ -68,7 +71,10 @@ class DataReviewPage(QWidget):
                 border: 2px solid rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
                 color: #000000;
-                }                           
+                }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }                           
         """)
         
         #INSTRUCTIONS BUTTON
