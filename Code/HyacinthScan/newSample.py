@@ -65,7 +65,10 @@ class NewSamplePage(QWidget):
                 border: 2px solid rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
                 color: #000000;
-                }                           
+                }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }                          
         """)
         self.add_image_button.clicked.connect(self.open_image_dialog)
 
@@ -131,10 +134,34 @@ class NewSamplePage(QWidget):
                 background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
                 border: 2px solid rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
-                color: #000000;
-                }                           
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
         """)
         self.next_button.clicked.connect(self.add_data_to_db)
+        
+        #CHECK DATA BUTTON
+        #VALIDATES USER INPUT BEFORE ALLOWING NEXT BUTTON TO BE VISIBLE
+        self.check_data_button = QPushButton('Check Data', self)
+        self.check_data_button.setFont(QFont('Inter', 20))
+        self.check_data_button.setGeometry(800, 680, 460, 60)
+        self.check_data_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        self.check_data_button.clicked.connect(self.validate_data)
+        
+        # Hide the next button initially
+        self.next_button.hide()
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
@@ -173,8 +200,6 @@ class NewSamplePage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
 
-    
-
     def addCounter(self):
         global counter
         counter += 1
@@ -204,7 +229,7 @@ class NewSamplePage(QWidget):
                 fileFirstCut = file_path.rfind("/") + 1
                 fileSecondCut = file_path.find(".")
                 captionName = file_path[fileFirstCut:fileSecondCut]
-                labelNames.append(captionName)
+                # labelNames.append(captionName)
                 
                 reply = self.imageName(captionName)
                 self.add_image_thumbnail(file_path, reply)
@@ -226,12 +251,23 @@ class NewSamplePage(QWidget):
         item = QListWidgetItem(QIcon(thumbnail), f"{captionName}_{end}")
         self.image_preview_area.addItem(item)
 
-    def add_data_to_db(self):
+    def validate_data(self):
+        # if counter == 0:
+        #     QMessageBox.warning(self, "Validation Error", "Please add at least one image.")
+        #     return
+        
+        # if not self.location_input.text().strip():
+        #     QMessageBox.warning(self, "Validation Error", "Please enter a location.")
+        #     return
+        
+        # if not self.date_input.date().toString("yyyy-MM-dd").strip():
+        #     QMessageBox.warning(self, "Validation Error", "Please add at least one image.")
+        #     return
+        
         image_ID = DBObj.selectID()[0][0]
         imagelocation = self.location_input.text()
         imagedate = self.date_input.date().toString("yyyy-MM-dd") 
 
-        
         if counter == 0:
             QMessageBox.information(self, "Error Message", "Image must be imported")
         elif imagelocation == "" or imagelocation == None:
@@ -239,22 +275,44 @@ class NewSamplePage(QWidget):
         elif imagedate == "" or imagedate == None:
             QMessageBox.information(self, "Error Message", "Date must be entered")
         else:
-            for i in range(counter):
-                image_ID += 1
-                arr = DataValidation.analyse_image(filePath[i]);
+            # If validation passes, hide check button and show next button
+            self.check_data_button.hide()
+            self.next_button.show()
+            #QMessageBox.information(self, "Validation Success", "Data validation successful! You can now proceed.")
+
+
+    def add_data_to_db(self):
+        image_ID = DBObj.selectID()[0][0]
+        imagelocation = self.location_input.text()
+        imagedate = self.date_input.date().toString("yyyy-MM-dd") 
+
+        # if counter == 0:
+        #     QMessageBox.information(self, "Error Message", "Image must be imported")
+        # elif imagelocation == "" or imagelocation == None:
+        #     QMessageBox.information(self, "Error Message", "Location must be entered")
+        # elif imagedate == "" or imagedate == None:
+        #     QMessageBox.information(self, "Error Message", "Date must be entered")
+        # else:
+        for i in range(counter):
+            image_ID += 1
+            arr = DataValidation.analyse_image(filePath[i]);
+            
+            if ( arr["lamina_area"] == "" or arr["lamina_area"] == None or
+                arr["lamina_length"] == "" or arr["lamina_length"] == None or
+                arr["lamina_width"] == "" or arr["lamina_width"] == None or
+                arr["scar_count"] == "" or arr["scar_count"] == None or
+                arr["scar_area"] == "" or arr["scar_area"] == None or
+                arr["damagepercentage"] == "" or arr["damagepercentage"] == None ):
+                QMessageBox.information(self, "Error Message", "Image Processing Failed")
+            else:
+                print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
+                #DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
                 
-                if ( arr["lamina_area"] == "" or arr["lamina_area"] == None or
-                    arr["lamina_length"] == "" or arr["lamina_length"] == None or
-                    arr["lamina_width"] == "" or arr["lamina_width"] == None or
-                    arr["scar_count"] == "" or arr["scar_count"] == None or
-                    arr["scar_area"] == "" or arr["scar_area"] == None or
-                    arr["damagepercentage"] == "" or arr["damagepercentage"] == None ):
-                    QMessageBox.information(self, "Error Message", "Image Processing Failed")
-                else:
-                    try:
-                        DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
-                    except:
-                        QMessageBox.information(self, "Error Message", "Adding to database failed")
+                # try:
+                #     DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
+                # except:
+                #     print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
+                #     QMessageBox.information(self, "Error Message", "Adding to database failed")
 
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):

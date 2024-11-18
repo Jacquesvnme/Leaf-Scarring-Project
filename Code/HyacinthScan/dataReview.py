@@ -113,7 +113,25 @@ class DataReviewPage(QWidget):
         icon = QIcon("./assets/images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
-        
+    
+        self.refresh_button = QPushButton(self)
+        self.refresh_button.setGeometry(1090, 20, 50, 50)
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        icon = QIcon("./assets/images/refresh.png") 
+        self.refresh_button.setIcon(icon)
+        self.refresh_button.setIconSize(QSize(44, 44))
+        self.refresh_button.clicked.connect(self.load_table_data) 
+    
     #LOADS ALL SAMPLES FROM DB FOR THE TABLE WIP
     def load_table_data(self):
         try:

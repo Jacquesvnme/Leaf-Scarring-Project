@@ -198,8 +198,30 @@ class OutputPage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
     
+        self.refresh_button = QPushButton(self)
+        self.refresh_button.setGeometry(1090, 20, 50, 50)
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        icon = QIcon("./assets/images/refresh.png") 
+        self.refresh_button.setIcon(icon)
+        self.refresh_button.setIconSize(QSize(44, 44))
+        self.refresh_button.clicked.connect(self.refresh_image_preview)
+    
     #REFRESHES IMAGE PREVIEW AREA    
     def refresh_image_preview(self):
+        counter = DBObj.rowCount()
+        data = DBObj.ImagePaths()
+        self.images = [data[i][0] for i in range(counter)]
+        # Clear and repopulate the image preview area
         self.image_preview_area.clear()
         for image in self.images:
             item = QListWidgetItem(image)
@@ -226,7 +248,6 @@ class OutputPage(QWidget):
             self.refresh_image_preview()
             self.display_stats_average(self.avg_results_area)
             self.display_stats_individual(self.imageResults_area)
-            # TODO: AUTO UPDATE AVERAGE RESULTS
 
     #TITLES AND FIELDS FOR SHOWING STATS
     #Loads and populates individual picture results
@@ -251,7 +272,7 @@ class OutputPage(QWidget):
                         ("Width of Leaf", 5, 0),
                         (f"{round(stats_data[0], 4)} cm<sup>2</sup>", 0, 1),  # lamina_area
                         (f"{round(stats_data[4], 4)} cm<sup>2</sup>", 1, 1),  # scar_area
-                        (f"{round(stats_data[5], 4)}", 2, 1),                 # damagepercentage
+                        (f"{round(stats_data[5], 4)} %", 2, 1),                 # damagepercentage
                         (f"{round(stats_data[3], 4)}", 3, 1),                 # scar_count
                         (f"{round(stats_data[1], 4)} cm", 4, 1),              # lamina_length
                         (f"{round(stats_data[2], 4)} cm", 5, 1)               # lamina_width
@@ -325,7 +346,7 @@ class OutputPage(QWidget):
             ("Width of Leaf", 5, 0),
             (f"{round(DBObj.LeafArea(),4)} cm<sup>2</sup>", 0, 1),
             (f"{round(DBObj.ScarArea(),4)} cm<sup>2</sup>", 1, 1),
-            (f"{round(DBObj.PercentageDamage(),4)}", 2, 1),
+            (f"{round(DBObj.PercentageDamage(),4)} %", 2, 1),
             (f"{round(DBObj.ScarsCount(),4)}", 3, 1),
             (f"{round(DBObj.LaminaLength(),4)} cm", 4, 1),
             (f"{round(DBObj.LaminaWidth(),4)} cm", 5, 1)
