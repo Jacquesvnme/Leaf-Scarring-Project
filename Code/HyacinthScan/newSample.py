@@ -12,6 +12,7 @@ from psycopg2 import sql
 from database import DBHandler as DBObj
 from sections import NewData as DataValidation 
 
+global counter, labelNames, filePath
 counter = 0
 labelNames = []
 filePath = []
@@ -199,6 +200,39 @@ class NewSamplePage(QWidget):
         icon = QIcon("./assets/images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
+
+        self.refresh_button = QPushButton(self)
+        self.refresh_button.setGeometry(1090, 20, 50, 50)
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        icon = QIcon("./assets/images/refresh.png") 
+        self.refresh_button.setIcon(icon)
+        self.refresh_button.setIconSize(QSize(44, 44))
+        self.refresh_button.clicked.connect(self.refresh_image_preview)
+        
+    def refresh_image_preview(self):
+        # Clear the image preview area
+        self.image_preview_area.clear()
+        self.location_input.clear()
+        
+        # Reset global variables
+        global counter, labelNames, filePath
+        counter = 0
+        labelNames = []
+        filePath = []
+        
+        # Hide the next button and show the check data button
+        self.next_button.hide()
+        self.check_data_button.show()
 
     def addCounter(self):
         global counter
