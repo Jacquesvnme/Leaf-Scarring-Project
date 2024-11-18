@@ -28,6 +28,7 @@ class MainWindow(QWidget):
         MainWindow.set_background_image(self)
 
         self.setWindowTitle("BCASAA")
+        self.setWindowIcon(QIcon("./assets/images/App_Icon.png"))
         self.setGeometry(100, 100, 1300, 780)
         self.stacked_widget = QStackedWidget(self)
 

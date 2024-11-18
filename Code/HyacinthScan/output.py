@@ -45,6 +45,7 @@ class OutputPage(QWidget):
                 line-height: 36px;
             }
         """)
+        
         self.image_preview_area = QListWidget(self)
         self.image_preview_area.setGeometry(40, 60, 460, 580)
         self.image_preview_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -197,16 +198,12 @@ class OutputPage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
     
-    
-    
     #REFRESHES IMAGE PREVIEW AREA    
     def refresh_image_preview(self):
         self.image_preview_area.clear()
         for image in self.images:
             item = QListWidgetItem(image)
             self.image_preview_area.addItem(item)
-
-
 
     #PROMPTS USER FOR CONFIRMATION
     def remove_selected_images(self):
