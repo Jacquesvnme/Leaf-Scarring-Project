@@ -1,39 +1,9 @@
-def leaf_outline(image_path):
-    import cv2
-    import numpy as np
-    import matplotlib.pyplot as plt
-
-    # Load the image
-    image = cv2.imread(image_path)
-
-    # Convert the image to HSV color space
-    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-
-    # Create masks for the calibration cube, leaf, and scars
-    green_lower = np.array([35, 40, 40])
-    green_upper = np.array([85, 255, 255])
-
-    # Create masks for the calibration leaf
-    green_mask = cv2.inRange(hsv_image, green_lower, green_upper)
-
-    # Find contours of the leaf
-    leaf_contours, _ = cv2.findContours(green_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    leaf_contour = max(leaf_contours, key=cv2.contourArea)
-
-    # Optionally display the results visually
-    cv2.drawContours(image, [leaf_contour], -1, (0, 255, 0), 2)
-
-    return image, leaf_contour
-
-
 def scar_counting(image_path):
     import cv2
     import numpy as np
 
     # Load the water hyacinth scar image
-    # image_path = r"Leaf_1.png"
     image = cv2.imread(image_path)
-    # cv2.imshow("Original", image)
 
     # Copy the image for masking
     result = image.copy()
@@ -91,21 +61,13 @@ def scar_counting(image_path):
     # Count the number of merged scars
     scar_count = len(merged_contours)
 
-    # Show results
-    # print(f"Total scars identified (merged): {scar_count}")
-    # cv2.imshow('Brown Mask', brown_mask)
-    # cv2.imshow('Result with Brown Scars Highlighted', result)
-
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
     return scar_count
 
 
-import cv2
-import numpy as np
- 
 def process_image(image_path):
+    import cv2
+    import numpy as np
+
     # Load the image
     frame = cv2.imread(image_path)
     if frame is None:
@@ -179,15 +141,6 @@ def process_image(image_path):
 
 
 def analyse_image(image_path):
-    image, leaf_contour = leaf_outline(image_path)
-    import cv2
-    import matplotlib.pyplot as plt
-    # Display the segmented image
-    plt.subplot(1, 2, 1)
-    plt.title('Leaf Outline Front')
-    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-    plt.axis('off')
-
     output = process_image(image_path)
 
     scar_count = scar_counting(image_path)
