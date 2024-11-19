@@ -72,6 +72,8 @@ def process_image(image_path):
     frame = cv2.imread(image_path)
     if frame is None:
         return None
+    
+    cv2.imwrite("Generated Images/Original_Image.png", frame)
 
     # Convert the BGR color space of the image to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
