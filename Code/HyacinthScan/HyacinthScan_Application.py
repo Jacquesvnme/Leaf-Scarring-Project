@@ -1,4 +1,9 @@
 import sys
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
 from PyQt5.QtWidgets import (
     QApplication, QLabel, QPushButton, QWidget, QMessageBox, QFileDialog, QListWidget, QVBoxLayout, QLineEdit,
     QDateEdit, QListWidgetItem, QStackedWidget, QTableWidget, QTableWidgetItem, QScrollArea, QHeaderView,
@@ -15,7 +20,7 @@ from dataReview import DataReviewPage
 from output import OutputPage
 
 from database import DBHandler as DBObj
-from database import DBHandler as DBObj
+from sections import NewData as DataValidation 
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -23,6 +28,7 @@ class MainWindow(QWidget):
         MainWindow.set_background_image(self)
 
         self.setWindowTitle("BCASAA")
+        self.setWindowIcon(QIcon("./assets/images/App_Icon.png"))
         self.setGeometry(100, 100, 1300, 780)
         self.stacked_widget = QStackedWidget(self)
 
@@ -57,17 +63,17 @@ class MainWindow(QWidget):
 
     def show_new_sample_page(self):
         self.stacked_widget.setCurrentWidget(self.new_sample_page)
-        
+    
     def show_data_review_page(self):
         self.stacked_widget.setCurrentWidget(self.data_review_page)
-        
+    
     def show_output_page(self):
         self.stacked_widget.setCurrentWidget(self.output_page)
-        
+    
     def set_background_image(self):
         palette = QPalette()
         background = QPixmap("./assets/images/BG.jpg")
-        scaled_background = background.scaled(QSize(1280, 720), Qt.KeepAspectRatioByExpanding)
+        scaled_background = background.scaled(QSize(1300, 780), Qt.KeepAspectRatioByExpanding)
         palette.setBrush(QPalette.Background, QBrush(scaled_background))
         self.setAutoFillBackground(True)
         self.setPalette(palette)

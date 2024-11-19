@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import (
     QApplication, QLabel, QPushButton, QWidget, QMessageBox, QFileDialog, QListWidget, QVBoxLayout, QLineEdit,
     QDateEdit, QListWidgetItem, QStackedWidget, QTableWidget, QTableWidgetItem, QScrollArea, QHeaderView,
-    QWidget, QGridLayout)
+    QWidget, QGridLayout, QListView)
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush, QIcon
 from PyQt5.QtCore import Qt, QDate, QSize
 
@@ -10,6 +10,12 @@ import psycopg2
 from psycopg2 import sql
 
 from database import DBHandler as DBObj
+from sections import NewData as DataValidation 
+
+global counter, labelNames, filePath
+counter = 0
+labelNames = []
+filePath = []
 
 #NEW SAMPLE PAGE
 class NewSamplePage(QWidget):
@@ -38,6 +44,10 @@ class NewSamplePage(QWidget):
         self.image_preview_area = QListWidget(self)
         self.image_preview_area.setGeometry(40, 60, 680, 580)
         self.image_preview_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.image_preview_area.setViewMode(QListView.IconMode)         # Set to Icon Mode
+        self.image_preview_area.setIconSize(QSize(150, 150))            # Set larger icon size for thumbnails
+        self.image_preview_area.setSpacing(10)                          # Add spacing between icons
+        self.image_preview_area.setResizeMode(QListWidget.Adjust)       # Adjust layout to fit contents
         self.image_preview_area.setStyleSheet("""
             QListWidget {
                 background-color: rgb(250, 250, 250);
@@ -56,7 +66,10 @@ class NewSamplePage(QWidget):
                 border: 2px solid rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
                 color: #000000;
-                }                           
+                }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }                          
         """)
         self.add_image_button.clicked.connect(self.open_image_dialog)
 
@@ -122,10 +135,34 @@ class NewSamplePage(QWidget):
                 background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
                 border: 2px solid rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
-                color: #000000;
-                }                           
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
         """)
-        #self.add_data_to_db()
+        self.next_button.clicked.connect(self.add_data_to_db)
+        
+        #CHECK DATA BUTTON
+        #VALIDATES USER INPUT BEFORE ALLOWING NEXT BUTTON TO BE VISIBLE
+        self.check_data_button = QPushButton('Check Data', self)
+        self.check_data_button.setFont(QFont('Inter', 20))
+        self.check_data_button.setGeometry(800, 680, 460, 60)
+        self.check_data_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        self.check_data_button.clicked.connect(self.validate_data)
+        
+        # Hide the next button initially
+        self.next_button.hide()
         
         #INSTRUCTIONS BUTTON
         self.instructions_button = QPushButton(self)
@@ -164,6 +201,51 @@ class NewSamplePage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
 
+        self.refresh_button = QPushButton(self)
+        self.refresh_button.setGeometry(1090, 20, 50, 50)
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        icon = QIcon("./assets/images/refresh.png") 
+        self.refresh_button.setIcon(icon)
+        self.refresh_button.setIconSize(QSize(44, 44))
+        self.refresh_button.clicked.connect(self.refresh_image_preview)
+        
+    def refresh_image_preview(self):
+        # Clear the image preview area
+        self.image_preview_area.clear()
+        self.location_input.clear()
+        
+        # Reset global variables
+        global counter, labelNames, filePath
+        counter = 0
+        labelNames = []
+        filePath = []
+        
+        # Hide the next button and show the check data button
+        self.next_button.hide()
+        self.check_data_button.show()
+
+    def addCounter(self):
+        global counter
+        counter += 1
+
+    def addImageLabel(self,data):
+        global labelNames
+        labelNames.append(data)
+
+    def addImagePath(self,data):
+        global filePath
+        filePath.append(data)
+
     def open_image_dialog(self):
         file_dialog = QFileDialog(self)
         file_dialog.setFileMode(QFileDialog.ExistingFiles)
@@ -171,57 +253,93 @@ class NewSamplePage(QWidget):
         if file_dialog.exec_():
             file_paths = file_dialog.selectedFiles()
             for file_path in file_paths:
-                self.add_image_thumbnail(file_path)
+                self.addCounter()
+                
+                path_length = len(file_path)
+                cut = file_path.find("/assets")
+                custom_file_path = f".{file_path[cut:path_length]}"
+                self.addImagePath(custom_file_path)
+                
+                fileFirstCut = file_path.rfind("/") + 1
+                fileSecondCut = file_path.find(".")
+                captionName = file_path[fileFirstCut:fileSecondCut]
+                # labelNames.append(captionName)
+                
+                reply = self.imageName(captionName)
+                self.add_image_thumbnail(file_path, reply)
 
-    def add_image_thumbnail(self, file_path):
+    def add_image_thumbnail(self, file_path, reply):
         pixmap = QPixmap(file_path)
         thumbnail = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         
         fileFirstCut = file_path.rfind("/") + 1
         fileSecondCut = file_path.find(".")
         captionName = file_path[fileFirstCut:fileSecondCut]
+        
+        if (reply == 65536):
+            end = "back"
+        elif (reply == 16384):
+            end = "front"
+        
+        self.addImageLabel(f"{captionName}_{end}")
 
-        item = QListWidgetItem(QIcon(thumbnail), f"{captionName}")
+        item = QListWidgetItem(QIcon(thumbnail), f"{captionName}_{end}")
         self.image_preview_area.addItem(item)
 
-        
-    """def add_data_to_db(self):
+    def validate_data(self):
         imagelocation = self.location_input.text()
-        imagedate = self.date_input.date().toString("yyyy-mm-dd")        
-        
-        #data1 = generate_imagedata_id() #function to make a new imagedataID, based on the newest imagedataID + 1#
-        data2 = imagelocation
-        data3 = imagedate
-                
-        for image_path in self.get_image_paths():
-            data4 = FTObj.image_path
-            data5 = FTObj. image_path
+        imagedate = self.date_input.date().toString("yyyy-MM-dd") 
+
+        if counter == 0:
+            QMessageBox.warning(self, "Error Message", "Image must be imported")
+        elif imagelocation == "" or imagelocation == None:
+            QMessageBox.warning(self, "Error Message", "Location must be entered")
+        elif imagedate == "" or imagedate == None:
+            QMessageBox.warning(self, "Error Message", "Date must be entered")
+        else:
+            # If validation passes, hide check button and show next button
+            self.check_data_button.hide()
+            self.next_button.show()
+            #QMessageBox.information(self, "Validation Success", "Data validation successful! You can now proceed.")
+
+
+    def add_data_to_db(self):
+        image_ID = DBObj.selectID()[0][0]
+        imagelocation = self.location_input.text()
+        imagedate = self.date_input.date().toString("yyyy-MM-dd") 
+
+        for i in range(counter):
+            image_ID += 1
+            arr = DataValidation.analyse_image(filePath[i]);
             
-            data = (
-                #data1,
-                data2,
-                data3,
-                data4,
-                data5,
-                FTObj.labeled_resized_leaf.get('image_label', ''),  # Label if available
-                FTObj.leaf_area_cm2.get('lamina_area', 0),
-                FTObj.leaf_length_cm.get('lamina_length', 0),
-                FTObj.leaf_width_cm.get('lamina_width', 0),
-                #count.get('scar_count', 0),
-                FTObj.scar_area_cm2.get('scar_area', 0),
-                FTObj.damage_percentage.get('damage_percentage', 0),
-                #.get('petiole_length', 0)
-            )        
-            # Insert data into the database
-            DBObj.insertCollection(*data)"""
-            
+            if ( arr["lamina_area"] == "" or arr["lamina_area"] == None or
+                arr["lamina_length"] == "" or arr["lamina_length"] == None or
+                arr["lamina_width"] == "" or arr["lamina_width"] == None or
+                arr["scar_count"] == "" or arr["scar_count"] == None or
+                arr["scar_area"] == "" or arr["scar_area"] == None or
+                arr["damagepercentage"] == "" or arr["damagepercentage"] == None ):
+                QMessageBox.information(self, "Error Message", "Image Processing Failed")
+            else:
+                try:
+                    DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
+                except:
+                    print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
+                    QMessageBox.information(self, "Error Message", "Adding to database failed")
+
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for New Sample Page:\n\n"
-            "1. Use the 'Add Images' button to upload image files (.png, .jpg).\n"
-            "2. Fill out the location and date fields.\n"
-            "3. Click 'Next' to proceed to the next step.\n"
-            "4. Use the 'Home' button to navigate back to the main screen"
+            "<h3>Instructions for New Sample Page:</h3>"
+            "<ol type='1'><li>Use the 'Add Images' button to upload image files (.png, .jpg).</li>"
+            "<li>Follow on screen prompts and pop-ups as needed</li>"
+            "<li>Fill out the location and date fields.</li>"
+            "<li>Click 'Next' to proceed to the next step.</li>"
+            "<li>Use the 'Home' button to navigate back to the main screen</li></ol>"
         )
         QMessageBox.information(self, "Instructions", instructions)
+
+    def imageName(self, imageName):
+        reply = QMessageBox.question(self, f"{imageName} Front or Back", "Is this the image front or back?\n" + 
+                                    "Yes = Front\nNo = Back\nDefault/Exit = Back",
+                                    QMessageBox.Yes | QMessageBox.No)
+        return reply

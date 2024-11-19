@@ -25,10 +25,42 @@ def TestConnection():
 
 # =========================================== SELECT STATEMENTS ===========================================
 
+def getIndividualStats(conn, image_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage
+            FROM public.\"imagedata\"
+                WHERE image_id = {image_id}
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows[0] if rows else None
+
+def selectMaxID(conn):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT max(details_id)
+            FROM public.details;
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows
+
+def getPathIDData(conn, data):
+    cur = conn.cursor()
+    cur.execute(f'''
+        SELECT Image_ID
+            FROM Images
+                WHERE Imagepath = '{data}'
+                ''')
+    rows = cur.fetchall()
+    cur.close()
+    return rows
+
 def getImagePaths(conn):
     cur = conn.cursor()
     cur.execute(f'''
-        SELECT imagepathback, imagepathfront
+        SELECT imagepath
             FROM public.\"images\"
                 ''')
     rows = cur.fetchall()
@@ -98,7 +130,7 @@ def avgLaminaWidth(conn):
 def TotalRecords(conn):
     cur = conn.cursor()
     cur.execute(f'''
-        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+        SELECT imagedata_id, imagelocation, imagedate, imagepath, imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage
             FROM public.\"details\"
                 FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
                 FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
@@ -111,7 +143,7 @@ def TotalRecords(conn):
 def selectAllData(conn):
     cur = conn.cursor()
     cur.execute(f'''
-        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+        SELECT imagedata_id, imagelocation, imagedate, imagepath, imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage
             FROM public.\"details\"
                 FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
                 FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
@@ -123,7 +155,7 @@ def selectAllData(conn):
 def selectSpecificData(conn, imagedata_id):
     cur = conn.cursor()
     cur.execute(f'''
-        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+        SELECT imagedata_id, imagelocation, imagedate, imagepath, imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage
             FROM public.\"details\"
                 FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
                 FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
@@ -135,24 +167,24 @@ def selectSpecificData(conn, imagedata_id):
 
 # =========================================== INSERT STATEMENTS ===========================================
 
-def insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
+def insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15):
     cur = conn.cursor()
     cur.execute(f'''
         INSERT INTO public.\"details\" (Details_ID,ImageLocation,ImageDate) 
         VALUES ({data1},'{data2}','{data3}');
         
-        INSERT INTO public.\"images\" (Image_ID, Details_ID, ImagePathBack, ImagePathFront)
-        VALUES ({data4},{data5},'{data6}','{data7}');
+        INSERT INTO public.\"images\" (Image_ID, Details_ID, imagepath)
+        VALUES ({data4},{data5},'{data6}');
         
-        INSERT INTO public.\"imagedata\" (ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage,Petiole_Length)
-        VALUES ({data8},{data9},'{data10}',{data11},{data12},{data13},{data14},{data15},{data16},{data17});
+        INSERT INTO public.\"imagedata\" (ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage)
+        VALUES ({data7},{data8},'{data9}',{data10},{data11},{data12},{data13},{data14},{data15});
                 ''')
     conn.commit()
     cur.close()
 
 # =========================================== UPDATE STATEMENTS ===========================================
 
-def updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
+def updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15):
     cur = conn.cursor()
     cur.execute(f'''
         UPDATE public.\"details\"
@@ -160,12 +192,12 @@ def updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, 
         WHERE Details_ID = {data1};
         
         UPDATE public.\"images\"
-        SET ImagePathBack = '{data6}', ImagePathFront = '{data7}'
+        SET imagepath = '{data6}'
         WHERE Image_ID = {data4};
         
         UPDATE public.\"imagedata\"
-        SET ImageLable = '{data10}', Lamina_Area = {data11}, Lamina_Length = {data12}, Lamina_Width = {data13}, Scar_Count = {data14}, Scar_Area = {data15}, DamagePercentage = {data16}, Petiole_Length = {data17}
-        WHERE ImageData_ID = {data8};
+        SET ImageLable = '{data9}', Lamina_Area = {data10}, Lamina_Length = {data11}, Lamina_Width = {data12}, Scar_Count = {data13}, Scar_Area = {data14}, DamagePercentage = {data15}
+        WHERE ImageData_ID = {data7};
                 ''')
     conn.commit()
     cur.close()
@@ -175,6 +207,15 @@ def updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, 
 # as PostgreSQL does cascading delete if 1 value (FK) gets deleted from Details table
 
 # NOTE I have confirmed that this is the case, but further investigation is needed
+
+def deleteImageName(conn, data1):
+    cur = conn.cursor()
+    cur.execute(f'''
+        DELETE FROM public.\"details\" WHERE details_id = '{data1[0][0]}';
+                ''')
+    conn.commit()
+    cur.close()
+
 
 def deleteDetails(conn, data1):
     cur = conn.cursor()
@@ -193,6 +234,36 @@ def deleteAllDetails(conn):
     cur.close()
 
 # =========================================== COLLECTION STATEMENTS ===========================================
+
+def getIndividualStatsCollection(image_id):
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+        return None
+    else:
+        print('Connection String Found')
+        tableData = getIndividualStats(conn, image_id)
+        conn.close()
+        return tableData
+
+def getPathID(data):
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = getPathIDData(conn, data)
+        conn.close()
+        return tableData
+
+def deleteImageNameCollection(data1):
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        deleteImageName(conn, data1)
+        conn.close()
 
 def ImagePaths():
     conn = TestConnection()
@@ -274,6 +345,16 @@ def rowCount():
         conn.close()
         return totalAmountOfRecords
 
+def selectID():
+    conn = TestConnection()
+    if conn == 'null':
+        print('No Connection String')
+    elif conn != 'null':
+        print('Connection String Found')
+        tableData = selectMaxID(conn)
+        conn.close()
+        return tableData
+
 def selectAllCollection():
     conn = TestConnection()
     if conn == 'null':
@@ -294,22 +375,22 @@ def selectCollection(imagedata_id):
         conn.close()
         return tableData
 
-def insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
+def insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+        insertAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15)
         conn.close()
 
-def updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17):
+def updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15):
     conn = TestConnection()
     if conn == 'null':
         print('No Connection String')
     elif conn != 'null':
         print('Connection String Found')
-        updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+        updateAllData(conn, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15)
         conn.close()
 
 def deleteCollection(data1):
@@ -335,7 +416,7 @@ def deleteAll():
 def selectData(conn):
     cur = conn.cursor()
     cur.execute(f'''
-        SELECT imagedata_id, imagelocation, imagedate, imagepathback, imagepathfront , imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage, petiole_length
+        SELECT imagedata_id, imagelocation, imagedate, imagepath, imagelable, lamina_area, lamina_length, lamina_width, scar_count, scar_area, damagepercentage
             FROM public.\"details\"
                 FULL JOIN public.\"images\" ON public.\"details\".details_id = public.\"images\".details_id
                 FULL JOIN public.\"imagedata\" ON public.\"images\".image_id = public.\"imagedata\".image_id
@@ -348,18 +429,18 @@ def SaveToCSV(tableData):
     try:
         file_path = ""
         with open('./assets/output/output.csv', 'w', newline='') as csvfile:
-            fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length']
+            fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
     except:
         print("Error in creating file.\nFile already exists")
     
     for data in tableData:
-        data = [{'imagedata_id': data[0], 'imagelocation': data[1], 'imagedate': data[2], 'imagepathback':data[3], 'imagepathfront':data[4], 'imagelable':data[5], 'lamina_area':data[6], 'lamina_length':data[7], 'lamina_width':data[8], 'scar_count':data[9], 'scar_area':data[10], 'damagepercentage':data[11], 'petiole_length':data[12]}]
+        data = [{'imagedata_id': data[0], 'imagelocation': data[1], 'imagedate': data[2], 'imagepath':data[3], 'imagelable':data[4], 'lamina_area':data[5], 'lamina_length':data[6], 'lamina_width':data[7], 'scar_count':data[8], 'scar_area':data[9], 'damagepercentage':data[10]}]
         
         try:
             with open('./assets/output/output.csv', 'a', newline='') as csvfile:
-                fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length']
+                fieldnames = ['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writerows(data)
         except:
@@ -376,61 +457,24 @@ def SaveProcess():
         conn.close()
         SaveToCSV(tableData)
 
-# SaveProcess()
 
-# =========================================== TEST FEATURES STATEMENTS ===========================================
 
-#* SELECT
-# imagedata_id = "5";
-# tableData = selectCollection(imagedata_id)
-# print(tableData)
 
-#* INSERT
-# data1 = 7
-# data2 = 'Johannesburg'
-# data3 = '2024-01-01'
-# data4 = 7
-# data5 = 7
-# data6 = './image7_back.png'
-# data7 = './image7_front.png'
-# data8 = 7
-# data9 = 7
-# data10 = 'image7'
-# data11 = 278
-# data12 = 14
-# data13 = 15
-# data14 = 14
-# data15 = 26
-# data16 = 0.146
-# data17 = 7
-# insertCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+# Possible implementation
 
-#* UPDATE
-# data1 = 7
-# data2 = 'Joburg'
-# data3 = '2024-01-01'
-# data4 = 7
-# data5 = 7
-# data6 = './image7_back333.png'
-# data7 = './image7_front333.png'
-# data8 = 7
-# data9 = 7
-# data10 = 'image744'
-# data11 = 278
-# data12 = 14
-# data13 = 15
-# data14 = 14
-# data15 = 26
-# data16 = 0.146
-# data17 = 7
-# updateCollection(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17)
+# def selectID():
+#     conn = TestConnection()
+#     if conn == 'null':
+#         print('No Connection String')
+#     elif conn != 'null':
+#         print('Connection String Found')
+#         tableData = generalized_statement(conn,"SELECT max(details_id) FROM public.details;")
+#         conn.close()
+#         return tableData
 
-#* DELETE
-# data1 = 7
-# deleteCollection(data1)
-
-#* SAVE DATA PROCESS
-# SaveProcess()
-
-# tableData = LeafArea()
-# print('Data: ' + str(tableData))
+# def generalized_statement(conn,sqlQuery):
+#     cur = conn.cursor()
+#     cur.execute(f"{sqlQuery}")
+#     rows = cur.fetchall()
+#     cur.close()
+#     return rows

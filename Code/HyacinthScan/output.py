@@ -22,13 +22,7 @@ class OutputPage(QWidget):
         arr = []
         
         for i in range(counter):
-            for j in range(2):
-                arr.append(data[i][j])
-        
-        print(arr)
-        
-        # data = ImagePaths()
-        # print(data[1][1])
+            arr.append(data[i][0])
         
         self.images = arr  #IMAGES STORED AS STRINGS/FILE PATHS
         
@@ -51,16 +45,18 @@ class OutputPage(QWidget):
                 line-height: 36px;
             }
         """)
+        
         self.image_preview_area = QListWidget(self)
         self.image_preview_area.setGeometry(40, 60, 460, 580)
         self.image_preview_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.image_preview_area.setSelectionMode(QListWidget.MultiSelection)
+        self.image_preview_area.setSelectionMode(QListWidget.SingleSelection)
         self.image_preview_area.setStyleSheet("""
             QListWidget {
                 background-color: rgb(250, 250, 250);
                 border-radius: 10px;
             }
         """)
+        self.image_preview_area.itemClicked.connect(self.update_individual_stats)
         self.refresh_image_preview()
         
         #REMOVE SELECTED BUTTON
@@ -80,11 +76,7 @@ class OutputPage(QWidget):
         """)
         self.remove_image_button.clicked.connect(self.remove_selected_images)
 
-        #INDIVIDUAL IMAGE RESULTS AREA
-        
-        #ADD CODE TO FETCH DATA FROM DATABASE OF SELECTED IMAGE
-        #UPDATES ON IMAGE THUMBNAIL CLICK
-        
+        #INDIVIDUAL IMAGE RESULTS AREA        
         self.imageResults_label = QLabel(self)
         self.imageResults_label.setText("Individual Results:")
         self.imageResults_label.setAlignment(Qt.AlignLeft)
@@ -113,9 +105,6 @@ class OutputPage(QWidget):
         """)
         
         #AVERAGE RESULTS AREA        
-        #ADD CODE TO RETRIVE COLLECTION DATA
-        #ADD CODE TO AVERAGE RESULTS OF DATA7, DATA8, DATA9, DATA10, DATA11, DATA12, DATA13
-        
         self.avgResults_label = QLabel(self)
         self.avgResults_label.setText("Averaged Results:")
         self.avgResults_label.setAlignment(Qt.AlignLeft)
@@ -149,12 +138,9 @@ class OutputPage(QWidget):
         self.display_stats_average(self.avg_results_area)
         self.display_stats_individual(self.imageResults_area)
         
+        
+        
         #SAVE DATA BUTTON
-        
-        #ADD CODE TO UPDATE COLLECTION
-        #USE UPDATECOLLECTION FROM DBHANDLER
-        #EXPORT TO CSV AS WELL
-        
         self.save_button = QPushButton("Save Data", self)
         self.save_button.setFont(QFont('Inter', 20))
         self.save_button.setGeometry(910, 680, 350, 60)
@@ -169,9 +155,11 @@ class OutputPage(QWidget):
                 background-color: #d9d9d9;
             }
         """)
-        self.save_button.clicked.connect(self.show_Save);
+        self.save_button.clicked.connect(self.show_Save)
         
-        #INSTRUCTIONS BUTTON
+        
+        
+        #INSTRUCTIONS / HELP  BUTTON
         self.instructions_button = QPushButton(self)
         self.instructions_button.setGeometry(1210, 20, 50, 50)
         self.instructions_button.setStyleSheet("""
@@ -189,6 +177,8 @@ class OutputPage(QWidget):
         self.instructions_button.setIcon(icon)
         self.instructions_button.setIconSize(QSize(44, 44))
         self.instructions_button.clicked.connect(self.show_instructions)
+        
+        
         
         #HOME BUTTON
         self.home_button = QPushButton(self)
@@ -208,9 +198,32 @@ class OutputPage(QWidget):
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
     
+        self.refresh_button = QPushButton(self)
+        self.refresh_button.setGeometry(1090, 20, 50, 50)
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        icon = QIcon("./assets/images/refresh.png") 
+        self.refresh_button.setIcon(icon)
+        self.refresh_button.setIconSize(QSize(44, 44))
+        self.refresh_button.clicked.connect(self.refresh_image_preview)
+        self.refresh_button.clicked.connect(self.update_average_stats)
+    
     #REFRESHES IMAGE PREVIEW AREA    
     def refresh_image_preview(self):
-        self.image_preview_area.clear()  # Clear the QListWidget
+        counter = DBObj.rowCount()
+        data = DBObj.ImagePaths()
+        self.images = [data[i][0] for i in range(counter)]
+        # Clear and repopulate the image preview area
+        self.image_preview_area.clear()
         for image in self.images:
             item = QListWidgetItem(image)
             self.image_preview_area.addItem(item)
@@ -231,31 +244,47 @@ class OutputPage(QWidget):
                 image_name = item.text()
                 if image_name in self.images:
                     self.images.remove(image_name)
+                    pathID = DBObj.getPathID(image_name)
+                    DBObj.deleteImageNameCollection(pathID)
             self.refresh_image_preview()
-            
+            self.display_stats_average(self.avg_results_area)
+            self.display_stats_individual(self.imageResults_area)
+
     #TITLES AND FIELDS FOR SHOWING STATS
-    # Helper function to create grid layout for stats labels
-    # Helper function to create grid layout for stats labels
-    
-    # Load title & data for Stats Individual Side
+    #Loads and populates individual picture results
     def create_stats_grid_individual(self):
         grid_layout_average = QGridLayout()
+        
+        selected_items = self.image_preview_area.selectedItems()    #get current selected image, if any
+        if selected_items:
+            image_path = selected_items[0].text()
+            path_id = DBObj.getPathID(image_path)
+            
+            if path_id:
+                stats_data = DBObj.getIndividualStatsCollection(path_id[0][0])  #gets stats via dbhandler
+                
+                if stats_data:
+                    stats = [
+                        ("Leaf Area", 0, 0),
+                        ("Scarred Area", 1, 0),
+                        ("Percentage Damage", 2, 0),
+                        ("Number of Scars", 3, 0),
+                        ("Length of Leaf", 4, 0),
+                        ("Width of Leaf", 5, 0),
+                        (f"{round(stats_data[0], 4)} cm<sup>2</sup>", 0, 1),  # lamina_area
+                        (f"{round(stats_data[4], 4)} cm<sup>2</sup>", 1, 1),  # scar_area
+                        (f"{round(stats_data[5], 4)} %", 2, 1),                 # damagepercentage
+                        (f"{round(stats_data[3], 4)}", 3, 1),                 # scar_count
+                        (f"{round(stats_data[1], 4)} cm", 4, 1),              # lamina_length
+                        (f"{round(stats_data[2], 4)} cm", 5, 1)               # lamina_width
+                    ]
 
-        # Labels for each stat field
-        stats = [
-            ("Leaf Area", 0, 0),
-            ("Scarred Area", 1, 0),
-            ("Percentage Damage", 2, 0),
-            ("Number of Scars", 3, 0),
-            ("Length of Leaf", 4, 0),
-            ("Width of Leaf", 5, 0),
-            (f"X cm<sup>2</sup>", 0, 1),
-            (f"X cm<sup>2</sup>", 1, 1),
-            (f"X", 2, 1),
-            (f"X", 3, 1),
-            (f"X cm", 4, 1),
-            (f"X cm", 5, 1)
-        ]
+                else:
+                    stats = self.get_placeholder_stats()
+            else:
+                stats = self.get_placeholder_stats()
+        else:
+            stats = self.get_placeholder_stats()
 
         for text, row, col in stats:
             label = QLabel(text)
@@ -282,6 +311,27 @@ class OutputPage(QWidget):
             grid_layout_average.addWidget(label, row, col)
 
         return grid_layout_average
+    
+    def get_placeholder_stats(self):
+        #Return placeholder stats when no image is selected or data is unavailable
+        return [
+            ("Leaf Area", 0, 0),
+            ("Scarred Area", 1, 0),
+            ("Percentage Damage", 2, 0),
+            ("Number of Scars", 3, 0),
+            ("Length of Leaf", 4, 0),
+            ("Width of Leaf", 5, 0),
+            ("- cm²", 0, 1),
+            ("- cm²", 1, 1),
+            ("-", 2, 1),
+            ("-", 3, 1),
+            ("- cm", 4, 1),
+            ("- cm", 5, 1)
+        ]
+    
+    #Updates individual stats grid when image is clicked
+    def update_individual_stats(self, item):
+        self.display_stats_individual(self.imageResults_area)
 
     # Load title & data for Stats Average Side
     def create_stats_grid_average(self):
@@ -297,7 +347,7 @@ class OutputPage(QWidget):
             ("Width of Leaf", 5, 0),
             (f"{round(DBObj.LeafArea(),4)} cm<sup>2</sup>", 0, 1),
             (f"{round(DBObj.ScarArea(),4)} cm<sup>2</sup>", 1, 1),
-            (f"{round(DBObj.PercentageDamage(),4)}", 2, 1),
+            (f"{round(DBObj.PercentageDamage(),4)} %", 2, 1),
             (f"{round(DBObj.ScarsCount(),4)}", 3, 1),
             (f"{round(DBObj.LaminaLength(),4)} cm", 4, 1),
             (f"{round(DBObj.LaminaWidth(),4)} cm", 5, 1)
@@ -329,6 +379,9 @@ class OutputPage(QWidget):
 
         return grid_layout_average
 
+    def update_average_stats(self, item):
+        self.display_stats_average(self.avg_results_area)
+
 # Displays stats layout in a scroll area with a transparent background
     def display_stats_average(self, scroll_area):
         container_widget = QWidget()
@@ -355,11 +408,11 @@ class OutputPage(QWidget):
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for Output Page:\n\n"
-            "1. Click on the images of the sample(s) you wish to remove.\n"
-            "   (if none are needed skip to step 3)\n"
-            "2. Click on the 'Remove selected' button to remove images from the dataset.\n"
-            "3. Click on the 'Save Data' button to save the data as an Excel file\n"
-            "4. Use the 'Home' button to navigate back to the main screen"
+            "<h3>Instructions for Output Page:</h3>"
+            "<p>Click on the images of the sample(s) you wish to remove.<br>"
+            "   (if none are needed skip to step 3)</p>"
+            "<p>Click on the 'Remove selected' button to remove images from the dataset.</p>"
+            "<p>Click on the 'Save Data' button to save the data as an CSV file.</p>"
+            "<p>Use the 'Home' button to navigate back to the main screen.</p>"
         )
         QMessageBox.information(self, "Instructions", instructions)

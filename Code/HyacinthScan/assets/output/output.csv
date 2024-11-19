@@ -1,6 +1,9 @@
-imagedata_id,imagelocation,imagedate,imagepathback,imagepathfront,imagelable,lamina_area,lamina_length,lamina_width,scar_count,scar_area,damagepercentage,petiole_length
-1,Johannesburg,2024-02-01,./image1_back.png,./image1_front.png,Image1,160.0,10.0,16.0,4,20.0,0.125,4.0
-2,Cape Town,2023-11-29,./image2_back.png,./image2_front.png,Image2,216.0,18.0,12.0,17,25.0,0.116,5.0
-3,Ethekwini,2024-05-15,./image3_back.png,./image3_front.png,Image3,240.0,15.0,16.0,8,35.0,0.146,7.0
-4,Ekurhuleni,2024-03-24,./image4_back.png,./image4_front.png,Image4,200.0,10.0,20.0,15,23.0,0.115,8.0
-5,Tshwane,2024-08-10,./image5_back.png,./image5_front.png,Image5,357.0,17.0,21.0,7,34.0,0.095,5.0
+imagedata_id,imagelocation,imagedate,imagepath,imagelable,lamina_area,lamina_length,lamina_width,scar_count,scar_area,damagepercentage
+1,Johannesburg,2024-02-01,./image1.png,Image1_front,160.0,10.0,16.0,4,20.0,0.125
+2,Cape Town,2023-11-29,./image2.png,Image1_back,216.0,18.0,12.0,17,25.0,0.116
+3,Ethekwini,2024-05-15,./image3.png,Image2_front,240.0,15.0,16.0,8,35.0,0.146
+4,Ekurhuleni,2024-03-24,./image4.png,Image2_back,200.0,10.0,20.0,15,23.0,0.115
+5,Tshwane,2024-08-10,./image5.png,Image3_front,357.0,17.0,21.0,7,34.0,0.095
+6,Benoni,2024-09-26,./image6.png,Image3_back,330.0,18.0,27.0,5,39.0,0.057
+7,asdasd,2024-11-18,./assets/input/aafds.png,aafds,120.7,26.32,25.52,33,0.17,0.14
+9,asdasd,2024-11-18,./assets/input/adfsfadssa.png,adfasa,120.7,26.32,25.52,33,0.17,0.14

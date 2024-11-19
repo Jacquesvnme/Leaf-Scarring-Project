@@ -118,9 +118,9 @@ class MainPage(QWidget):
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for Using the Application:\n\n"
-            "1. Click 'New Sample' to input new data samples.\n"
-            "2. Click 'Data Review' to review existing data and analysis.\n"
-            "3. Credits are listed at the bottom for project contributors."
+            "<h3>Instructions for Using the Application:<br></h3>"
+            "<ol type='1'><li>Click 'New Sample' to input new data samples.</li>"
+            "<li>Click 'Data Review' to review existing data and analysis.</li>"
+            "<li>Credits are listed at the bottom, featuring project contributors.</li></ol>"
         )
         QMessageBox.information(self, "Instructions", instructions)

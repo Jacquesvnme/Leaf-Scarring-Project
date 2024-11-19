@@ -37,10 +37,10 @@ class DataReviewPage(QWidget):
         """)
         self.dataSets_table = QTableWidget(self)
         self.dataSets_table.setGeometry(40, 140, 1200, 510)
-        self.dataSets_table.setColumnCount(13)
+        self.dataSets_table.setColumnCount(11)
         header = self.dataSets_table.horizontalHeader()       
 
-        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'])
+        self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage'])
         self.dataSets_table.setSortingEnabled(True)  #CAN SORT BY COLUMN
         self.load_table_data()
 
@@ -55,6 +55,9 @@ class DataReviewPage(QWidget):
                 border-radius: 10px;
                 color: #000000;
             }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
         """)
         self.selectSample_button.clicked.connect(self.fetch_selected_sample)
         
@@ -68,7 +71,10 @@ class DataReviewPage(QWidget):
                 border: 2px solid rgba(255, 255, 255, 0.2);
                 border-radius: 10px;
                 color: #000000;
-                }                           
+                }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }                           
         """)
         
         #INSTRUCTIONS BUTTON
@@ -107,7 +113,25 @@ class DataReviewPage(QWidget):
         icon = QIcon("./assets/images/home_icon.png")
         self.home_button.setIcon(icon)
         self.home_button.setIconSize(QSize(44, 44))
-        
+    
+        self.refresh_button = QPushButton(self)
+        self.refresh_button.setGeometry(1090, 20, 50, 50)
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: qlineargradient(spread:pad, x1:0.493, y1:1, x2:0.471, y2:0, stop:0 rgba(217, 217, 217, 255), stop:0.8125 rgba(255, 255, 255, 255));
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #d9d9d9;
+            }
+        """)
+        icon = QIcon("./assets/images/refresh.png") 
+        self.refresh_button.setIcon(icon)
+        self.refresh_button.setIconSize(QSize(44, 44))
+        self.refresh_button.clicked.connect(self.load_table_data) 
+    
     #LOADS ALL SAMPLES FROM DB FOR THE TABLE WIP
     def load_table_data(self):
         try:
@@ -130,24 +154,19 @@ class DataReviewPage(QWidget):
         if selected_row == -1:
             QMessageBox.warning(self, "Selection Error", "Please select a data set from the table.")
             return
-        
-#'imagedata_id', 'imagelocation', 'imagedate', 'imagepathback', 'imagepathfront', 'imagelable',
-# #'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage', 'petiole_length'
 
         # Get selected values from the table
         imagedata_id = self.dataSets_table.item(selected_row, 0).text()
         imagelocation = self.dataSets_table.item(selected_row, 1).text()
         imagedate = self.dataSets_table.item(selected_row, 2).text()
-        imagepathback = self.dataSets_table.item(selected_row, 3).text()
-        imagepathfront = self.dataSets_table.item(selected_row, 4).text()
-        imagelable = self.dataSets_table.item(selected_row, 5).text()
-        lamina_area = self.dataSets_table.item(selected_row, 6).text()
-        lamina_length = self.dataSets_table.item(selected_row, 7).text()
-        lamina_width = self.dataSets_table.item(selected_row, 8).text()
-        scar_count = self.dataSets_table.item(selected_row, 9).text()
-        scar_area = self.dataSets_table.item(selected_row, 10).text()
-        damagepercentage = self.dataSets_table.item(selected_row, 11).text()
-        petiole_length = self.dataSets_table.item(selected_row, 12).text()
+        imagepath = self.dataSets_table.item(selected_row, 3).text()
+        imagelable = self.dataSets_table.item(selected_row, 4).text()
+        lamina_area = self.dataSets_table.item(selected_row, 5).text()
+        lamina_length = self.dataSets_table.item(selected_row, 6).text()
+        lamina_width = self.dataSets_table.item(selected_row, 7).text()
+        scar_count = self.dataSets_table.item(selected_row, 8).text()
+        scar_area = self.dataSets_table.item(selected_row, 9).text()
+        damagepercentage = self.dataSets_table.item(selected_row, 10).text()
         
         try:
             result = DBObj.selectCollection(imagedata_id)
@@ -163,13 +182,10 @@ class DataReviewPage(QWidget):
     #CREATES POP-UP WITH INSTRUCTIONS WIP
     def show_instructions(self):
         instructions = (
-            "Instructions for Data Review Page:\n\n"
-            "1. Click on the dataset from the list you want to review.\n"
-            "2. Click on the 'Select Sample' button.\n"
-            "3. Click on the 'Next' button to continue to the next page.\n"
-            "4. Click on the 'Home' button to return to the main screen.\n\n"
-            "Please note that the datasets can be sorted by date and\n"
-            " by location. To do so click on the column header\n"
-            "(Date or Location) to sort decendingly or accendingly"
+            "<h3>Instructions for Data Review Page:</h3>"
+            "<ol type='1'><li>Click on the dataset from the list you want to review.</li>"
+            "<li>Click on the 'Select Sample' button.</li>"
+            "<li>Click on the 'Next' button to continue to the next page.</li>"
+            "<li>lick on the 'Home' button to return to the main screen.</li></ol>"
         )
         QMessageBox.information(self, "Instructions", instructions)
