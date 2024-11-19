@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
+import os
+print(os.getcwd())
 
 # List of image paths
-# image_paths = ['Sample Data/RealImage1.jpg']
-image_paths = ['Sample Data/4&8Square.jpg', 'Sample Data/RealWaterHysantUseForColorFilter.jpg']
+image_paths = ['./Sample\ Data/RealImage1.jpg']
+# image_paths = ['/Sample Data/4&8Square.jpg', '/Sample Data/RealWaterHysantUseForColorFilter.jpg']
 
 # Loop through each image
 for image_path in image_paths:
