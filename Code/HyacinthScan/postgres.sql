@@ -42,32 +42,15 @@ AS
 
 SELECT * FROM viewData
 
--- For testing purposes
+INSERT INTO Details(Details_ID,ImageLocation,ImageDate)
+VALUES
+	(1,'Nothing','2024-02-01'),
 
--- INSERT INTO Details(Details_ID,ImageLocation,ImageDate)
--- VALUES
--- 	(1,'Johannesburg','2024-02-01'),
--- 	(2,'Cape Town','2023-11-29'),
--- 	(3,'Ethekwini','2024-05-15'),
--- 	(4,'Ekurhuleni','2024-03-24'),
--- 	(5,'Tshwane','2024-08-10'),
--- 	(6,'Benoni','2024-09-26');
+INSERT INTO Images(Image_ID, Details_ID, ImagePath)
+VALUES
+	(1,1,'./DummyImage.png'),
 
--- INSERT INTO Images(Image_ID, Details_ID, ImagePath)
--- VALUES
--- 	(1,1,'./image1.png'),
--- 	(2,2,'./image2.png'),
--- 	(3,3,'./image3.png'),
--- 	(4,4,'./image4.png'),
--- 	(5,5,'./image5.png'),
--- 	(6,6,'./image6.png');
-
--- INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage)
--- VALUES
--- 	(1,1,'Image1_front',160,10,16,4,20,0.125),
--- 	(2,2,'Image1_back',216,18,12,17,25,0.116),
--- 	(3,3,'Image2_front',240,15,16,8,35,0.146),
--- 	(4,4,'Image2_back',200,10,20,15,23,0.115),
--- 	(5,5,'Image3_front',357,17,21,7,34,0.095),
--- 	(6,6,'Image3_back',330,18,27,5,39,0.057);
--- 	-- area,length & width are of cm & cm^2
+INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage)
+VALUES
+	(1,1,'DummyImage',1,1,1,1,1,0.001)
+	-- area,length & width are of cm & cm^2
