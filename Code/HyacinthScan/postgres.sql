@@ -42,6 +42,8 @@ AS
 
 SELECT * FROM viewData
 
+-- For testing purposes
+
 -- INSERT INTO Details(Details_ID,ImageLocation,ImageDate)
 -- VALUES
 -- 	(1,'Johannesburg','2024-02-01'),
