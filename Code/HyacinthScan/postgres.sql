@@ -31,17 +31,6 @@ ADD CONSTRAINT fk_Details FOREIGN KEY(Details_ID) REFERENCES Details(Details_ID)
 ALTER TABLE ImageData
 ADD CONSTRAINT fk_Images FOREIGN KEY(Image_ID) REFERENCES Images(Image_ID) ON DELETE CASCADE;
 
-CREATE VIEW viewData
-AS
-	SELECT imagedata_id, imagelocation, imagedate,
-			imagepath, imagelable, lamina_area, lamina_length,
-			lamina_width, scar_count, scar_area, damagepercentage
-		FROM public.details
-			FULL JOIN public.images ON public.details.details_id = public.images.details_id
-			FULL JOIN public.imagedata ON public.images.image_id = public.imagedata.image_id;
-
-SELECT * FROM viewData
-
 INSERT INTO Details(Details_ID,ImageLocation,ImageDate)
 VALUES
 	(1,'Nothing','2024-02-01')
@@ -54,3 +43,14 @@ INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length
 VALUES
 	(1,1,'DummyImage',1,1,1,1,1,0.001)
 	-- area,length & width are of cm & cm^2
+
+CREATE VIEW viewData
+AS
+	SELECT imagedata_id, imagelocation, imagedate,
+			imagepath, imagelable, lamina_area, lamina_length,
+			lamina_width, scar_count, scar_area, damagepercentage
+		FROM public.details
+			FULL JOIN public.images ON public.details.details_id = public.images.details_id
+			FULL JOIN public.imagedata ON public.images.image_id = public.imagedata.image_id;
+
+SELECT * FROM viewData
