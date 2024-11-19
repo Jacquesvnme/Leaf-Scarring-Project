@@ -273,7 +273,7 @@ class NewSamplePage(QWidget):
         thumbnail = pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         
         fileFirstCut = file_path.rfind("/") + 1
-        fileSecondCut = file_path.find(".")
+        fileSecondCut = file_path.rfind(".")
         captionName = file_path[fileFirstCut:fileSecondCut]
         
         if (reply == 65536):
