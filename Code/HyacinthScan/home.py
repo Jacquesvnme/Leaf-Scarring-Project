@@ -31,7 +31,7 @@ class MainPage(QWidget):
                 font-size: 50px;
                 line-height: 80px;
                 text-align: center;
-                color: #000000;
+                color: #ffffff;
             }
         """)
         
