@@ -33,15 +33,15 @@ ADD CONSTRAINT fk_Images FOREIGN KEY(Image_ID) REFERENCES Images(Image_ID) ON DE
 
 INSERT INTO Details(Details_ID,ImageLocation,ImageDate)
 VALUES
-	(1,'Nothing','2024-02-01')
+	(1,'Dummy Image','2024-11-20')
 
 INSERT INTO Images(Image_ID, Details_ID, ImagePath)
 VALUES
-	(1,1,'./DummyImage.png')
+	(1,1,'./assets/input/inputImage.png')
 
 INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage)
 VALUES
-	(1,1,'DummyImage',1,1,1,1,1,0.001)
+	(1,1,'inputImage_front',14.5,8.79,10.36,28,1.98,13.63)
 	-- area,length & width are of cm & cm^2
 
 CREATE VIEW viewData
