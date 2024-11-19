@@ -261,7 +261,7 @@ class NewSamplePage(QWidget):
                 self.addImagePath(custom_file_path)
                 
                 fileFirstCut = file_path.rfind("/") + 1
-                fileSecondCut = file_path.find(".")
+                fileSecondCut = file_path.rfind(".")
                 captionName = file_path[fileFirstCut:fileSecondCut]
                 # labelNames.append(captionName)
                 
