@@ -323,7 +323,7 @@ class NewSamplePage(QWidget):
                 try:
                     DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
                 except:
-                    print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
+                    #print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
                     QMessageBox.information(self, "Error Message", "Adding to database failed")
 
     #CREATES POP-UP WITH INSTRUCTIONS WIP
