@@ -44,11 +44,11 @@ SELECT * FROM viewData
 
 INSERT INTO Details(Details_ID,ImageLocation,ImageDate)
 VALUES
-	(1,'Nothing','2024-02-01'),
+	(1,'Nothing','2024-02-01')
 
 INSERT INTO Images(Image_ID, Details_ID, ImagePath)
 VALUES
-	(1,1,'./DummyImage.png'),
+	(1,1,'./DummyImage.png')
 
 INSERT INTO ImageData(ImageData_ID,Image_ID,ImageLable,Lamina_Area,Lamina_Length,Lamina_Width,Scar_Count,Scar_Area,DamagePercentage)
 VALUES
