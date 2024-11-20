@@ -84,6 +84,9 @@ def process_image(image_path):
     lower_white = np.array([0, 0, 200])  # Lower bound for white
     upper_white = np.array([180, 55, 255])  # Upper bound for white
     cube_mask = cv2.inRange(hsv, lower_white, upper_white)
+    # lower_red = np.array([0, 160, 219])  # Lower bound for red
+    # upper_red = np.array([179, 255, 255])  # Upper bound for red
+    # cube_mask = cv2.inRange(hsv, lower_red, upper_red)
     cv2.imwrite("Generated Images/Cube_Mask.png", cube_mask)
     contours, _ = cv2.findContours(cube_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
