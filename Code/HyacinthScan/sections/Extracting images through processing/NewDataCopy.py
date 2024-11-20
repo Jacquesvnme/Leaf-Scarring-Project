@@ -20,6 +20,7 @@ def scar_counting(image_path):
 
     # Apply mask to get only the brown regions
     result = cv2.bitwise_and(result, result, mask=brown_mask)
+    cv2.imwrite("Generated Images/Scars.png", result)
 
     # Find contours in the brown mask
     contours, _ = cv2.findContours(brown_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
