@@ -42,6 +42,7 @@ class DataReviewPage(QWidget):
 
         self.dataSets_table.setHorizontalHeaderLabels(['imagedata_id', 'imagelocation', 'imagedate', 'imagepath', 'imagelable', 'lamina_area', 'lamina_length', 'lamina_width', 'scar_count', 'scar_area', 'damagepercentage'])
         self.dataSets_table.setSortingEnabled(True)  #CAN SORT BY COLUMN
+        # Added change
         self.load_table_data()
 
         #SELECT SAMPLE BUTTON

@@ -21,10 +21,12 @@ class OutputPage(QWidget):
         data = DBObj.ImagePaths()
         arr = []
         
-        for i in range(counter):
-            arr.append(data[i][0])
-        
-        self.images = arr  #IMAGES STORED AS STRINGS/FILE PATHS
+        # Added change
+        if len(data) != 0 :
+            for i in range(counter):
+                arr.append(data[i][0])
+            
+            self.images = arr  #IMAGES STORED AS STRINGS/FILE PATHS
         
         # Samples Image Preview section
         self.sample_label = QLabel(self)
@@ -57,6 +59,7 @@ class OutputPage(QWidget):
             }
         """)
         self.image_preview_area.itemClicked.connect(self.update_individual_stats)
+        # Added change
         self.refresh_image_preview()
         
         #REMOVE SELECTED BUTTON
@@ -135,7 +138,9 @@ class OutputPage(QWidget):
         #GRID LAYOUT FOR DATA
         self.imageResults_area.setWidgetResizable(True)
         self.avg_results_area.setWidgetResizable(True)
+        # Added change
         self.display_stats_average(self.avg_results_area)
+        # Added change
         self.display_stats_individual(self.imageResults_area)
         
         
@@ -338,6 +343,23 @@ class OutputPage(QWidget):
         grid_layout_average = QGridLayout()
 
         # Labels for each stat field
+        
+        # Added Change
+        stat1 = DBObj.LeafArea()
+        stat2 = DBObj.ScarArea()
+        stat3 = DBObj.PercentageDamage()
+        stat4 = DBObj.ScarsCount()
+        stat5 = DBObj.LaminaLength()
+        stat6 = DBObj.LaminaWidth()
+        
+        if stat1 == None or stat2 == None or stat3 == None or stat4 == None or stat5 == None or stat6 == None:
+            stat1 = 0
+            stat2 = 0
+            stat3 = 0
+            stat4 = 0
+            stat5 = 0
+            stat6 = 0
+        
         stats = [
             ("Leaf Area", 0, 0),
             ("Scarred Area", 1, 0),
@@ -345,12 +367,12 @@ class OutputPage(QWidget):
             ("Number of Scars", 3, 0),
             ("Length of Leaf", 4, 0),
             ("Width of Leaf", 5, 0),
-            (f"{round(DBObj.LeafArea(),4)} cm<sup>2</sup>", 0, 1),
-            (f"{round(DBObj.ScarArea(),4)} cm<sup>2</sup>", 1, 1),
-            (f"{round(DBObj.PercentageDamage(),4)} %", 2, 1),
-            (f"{round(DBObj.ScarsCount(),4)}", 3, 1),
-            (f"{round(DBObj.LaminaLength(),4)} cm", 4, 1),
-            (f"{round(DBObj.LaminaWidth(),4)} cm", 5, 1)
+            (f"{round(stat1,4)} cm<sup>2</sup>", 0, 1),
+            (f"{round(stat2,4)} cm<sup>2</sup>", 1, 1),
+            (f"{round(stat3,4)} %", 2, 1),
+            (f"{round(stat4,4)}", 3, 1),
+            (f"{round(stat5,4)} cm", 4, 1),
+            (f"{round(stat6,4)} cm", 5, 1)
         ]
 
         for text, row, col in stats:

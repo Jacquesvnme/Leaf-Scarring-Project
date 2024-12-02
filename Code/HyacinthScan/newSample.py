@@ -308,8 +308,13 @@ class NewSamplePage(QWidget):
         imagelocation = self.location_input.text()
         imagedate = self.date_input.date().toString("yyyy-MM-dd") 
 
+        # Added change
         for i in range(counter):
-            image_ID += 1
+            if image_ID == None:
+                image_ID = 1
+            else:
+                image_ID += 1
+            
             arr = DataValidation.analyse_image(filePath[i]);
             
             if ( arr["lamina_area"] == "" or arr["lamina_area"] == None or
@@ -322,8 +327,11 @@ class NewSamplePage(QWidget):
             else:
                 try:
                     DBObj.insertCollection(image_ID,imagelocation,imagedate,image_ID,image_ID,filePath[i],image_ID,image_ID,labelNames[i],arr["lamina_area"],arr["lamina_length"],arr["lamina_width"],arr["scar_count"],arr["scar_area"],arr["damagepercentage"])
+                    print(f"i:{i}")
+                    print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
                 except:
-                    #print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
+                    print(f"i:{i}")
+                    print(f"{image_ID}//{imagelocation}//{imagedate}//{filePath[i]}//{labelNames[i]}//{arr["lamina_area"]}//{arr["lamina_length"]}//{arr["lamina_width"]}//{arr["scar_count"]}//{arr["scar_area"]}//{arr["damagepercentage"]}")
                     QMessageBox.information(self, "Error Message", "Adding to database failed")
 
     #CREATES POP-UP WITH INSTRUCTIONS WIP

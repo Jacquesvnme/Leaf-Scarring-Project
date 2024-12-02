@@ -1,2 +1,1 @@
 imagedata_id,imagelocation,imagedate,imagepath,imagelable,lamina_area,lamina_length,lamina_width,scar_count,scar_area,damagepercentage
-1,Dummy Image,2024-11-20,./assets/input/inputImage.png,inputImage_front,14.5,8.79,10.36,28,1.98,13.63
