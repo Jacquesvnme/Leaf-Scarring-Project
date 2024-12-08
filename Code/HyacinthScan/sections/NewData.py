@@ -2,64 +2,65 @@ def scar_counting(image_path):
     import cv2
     import numpy as np
 
-    # Load the water hyacinth scar image
+    # Load the image
     image = cv2.imread(image_path)
 
-    # Copy the image for masking
-    result = image.copy()
+    if image is None:
+        print("Error: Image not found!")
+        return None
 
-    # Convert image to HSV color space
+    # Convert the image to HSV color space
     image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # Define HSV color range for brownish scars on water hyacinth
-    lower_brown = np.array([10, 50, 20])   # Lower bound for brown hues
-    upper_brown = np.array([20, 255, 200]) # Upper bound for brown hues
+    # Define HSV color range for green color of the leaf
+    lower_green = np.array([35, 50, 50], dtype=np.uint8)  # Lower bound for green hues
+    upper_green = np.array([85, 255, 255], dtype=np.uint8)  # Upper bound for green hues
 
-    # Create mask based on the defined brown color range
-    brown_mask = cv2.inRange(image_hsv, lower_brown, upper_brown)
+    # Create a mask for the green regions
+    green_mask = cv2.inRange(image_hsv, lower_green, upper_green)
 
-    # Apply mask to get only the brown regions
-    result = cv2.bitwise_and(result, result, mask=brown_mask)
+    # Find contours in the green mask
+    contours, _ = cv2.findContours(green_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Find contours in the brown mask
-    contours, _ = cv2.findContours(brown_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Select the largest contour (assuming it's the main leaf area)
+    if len(contours) == 0:
+        print("No leaf contour found!")
+        return None
 
-    # Initialize a list to keep track of merged contours
-    merged_contours = []
+    main_contour = max(contours, key=cv2.contourArea)
 
-    # Distance threshold in pixels (for 0.1 cm)
-    distance_threshold = 10  # 0.1 cm in pixels (100 pixels/cm * 0.1 cm)
+    # Create a blank mask for the main leaf
+    leaf_mask = np.zeros_like(green_mask)
+    cv2.drawContours(leaf_mask, [main_contour], -1, 255, thickness=cv2.FILLED)
 
-    # Process contours to merge close scars
-    for contour in contours:
-        if len(contour) > 0:
-            # Calculate the centroid of the current contour
-            M = cv2.moments(contour)
-            if M["m00"] != 0:
-                cX = int(M["m10"] / M["m00"])
-                cY = int(M["m01"] / M["m00"])
-            else:
-                continue
+    # Detect gaps by finding areas within the leaf mask that are not filled
+    gaps_mask = cv2.bitwise_and(cv2.bitwise_not(green_mask), leaf_mask)
 
-            # Check if this centroid is too close to any existing merged contour centroid
-            too_close = False
-            for merged_contour in merged_contours:
-                # Calculate the distance between the centroids
-                merged_M = cv2.moments(merged_contour)
-                merged_cX = int(merged_M["m10"] / merged_M["m00"])
-                merged_cY = int(merged_M["m01"] / merged_M["m00"])
+    # Find contours for gaps
+    gap_contours, _ = cv2.findContours(gaps_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-                distance = np.sqrt((cX - merged_cX) ** 2 + (cY - merged_cY) ** 2)
-                if distance < distance_threshold:
-                    too_close = True
-                    break
+    # Initialize the gap counter
+    scar_count = 0
 
-            # If it's not too close to any merged contour, add it
-            if not too_close:
-                merged_contours.append(contour)
+    # Minimum area threshold for a gap (in pixels)
+    min_gap_area = 100  # Adjust this value as needed
 
-    # Count the number of merged scars
-    scar_count = len(merged_contours)
+    # Draw the gaps on the original image
+    image_with_gaps = image.copy()
+
+    for contour in gap_contours:
+        area = cv2.contourArea(contour)
+        if area > min_gap_area:  # Only count gaps above the area threshold
+            scar_count += 1
+            cv2.drawContours(image_with_gaps, [contour], -1, (0, 0, 255), 2)  # Highlight gap in red
+
+    # Display the results
+    # resized_original = cv2.resize(image, (300, 300))
+    # resized_gaps = cv2.resize(image_with_gaps, (1100, 1100))
+    # cv2.imshow("Original Image", resized_original)
+    # cv2.imshow("Image with Gaps Highlighted", resized_gaps)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     return scar_count
 

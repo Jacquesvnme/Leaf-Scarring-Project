@@ -323,6 +323,7 @@ class NewSamplePage(QWidget):
                 arr["scar_count"] == "" or arr["scar_count"] == None or
                 arr["scar_area"] == "" or arr["scar_area"] == None or
                 arr["damagepercentage"] == "" or arr["damagepercentage"] == None ):
+                print(f"{arr["lamina_area"]} & {arr["lamina_length"]} & {arr["lamina_width"]} & {arr["scar_count"]} & {arr["scar_area"]} & {arr["damagepercentage"]}")
                 QMessageBox.information(self, "Error Message", "Image Processing Failed")
             else:
                 try:
