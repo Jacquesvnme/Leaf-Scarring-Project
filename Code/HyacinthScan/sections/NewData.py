@@ -55,12 +55,12 @@ def scar_counting(image_path):
             cv2.drawContours(image_with_gaps, [contour], -1, (0, 0, 255), 2)  # Highlight gap in red
 
     # Display the results
-    # resized_original = cv2.resize(image, (300, 300))
-    # resized_gaps = cv2.resize(image_with_gaps, (1100, 1100))
-    # cv2.imshow("Original Image", resized_original)
-    # cv2.imshow("Image with Gaps Highlighted", resized_gaps)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    resized_original = cv2.resize(image, (300, 300))
+    resized_gaps = cv2.resize(image_with_gaps, (800, 800))
+    cv2.imshow("Original Image", resized_original)
+    cv2.imshow("Image with Gaps Highlighted", resized_gaps)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     return scar_count
 

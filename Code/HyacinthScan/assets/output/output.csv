@@ -1,11 +1,16 @@
 imagedata_id,imagelocation,imagedate,imagepath,imagelable,lamina_area,lamina_length,lamina_width,scar_count,scar_area,damagepercentage
-1,Benoni,2024-12-03,./assets/input/inputImage1.png,inputImage1_front,112.55,16.77,19.77,27,9.26,8.23
-2,Benoni,2024-12-03,./assets/input/inputImage2.png,inputImage2_front,120.7,26.32,25.52,33,0.17,0.14
-3,Benoni,2024-12-03,./assets/input/Leaf 1.jpg,Leaf 1_front,27.68,22.41,14.13,54,0.19,0.68
-4,Benoni,2024-12-03,./assets/input/Leaf 2.jpg,Leaf 2_front,57.57,14.62,10.16,89,0.07,0.12
-5,Benoni,2024-12-03,./assets/input/Leaf 3A.jpg,Leaf 3A_front,59.54,11.94,10.68,38,0.03,0.06
-6,Benoni,2024-12-03,./assets/input/Leaf 3B.jpg,Leaf 3B_front,33.98,13.56,13.0,48,0.05,0.14
-7,Benoni,2024-12-03,./assets/input/Leaf 4A.jpg,Leaf 4A_front,23.44,11.13,8.56,130,10.78,45.99
-8,Benoni,2024-12-03,./assets/input/Leaf 4B.jpg,Leaf 4B_front,22.36,11.34,9.31,259,3.55,15.87
-9,Benoni,2024-12-03,./assets/input/Leaf 5A.jpg,Leaf 5A_front,41.5,10.11,8.43,39,0.01,0.03
-10,Benoni,2024-12-03,./assets/input/Leaf 5B.jpg,Leaf 5B_front,32.58,10.01,8.05,44,0.01,0.04
+1,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image1.jpg,Sample_Image1_front,21.11,11.09,12.65,16,0.0,0.01
+2,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image2.jpg,Sample_Image2_front,20.48,10.84,13.83,12,0.0,0.01
+3,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image3.jpg,Sample_Image3_front,39.79,7.84,10.03,12,0.0,0.0
+4,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image4.jpg,Sample_Image4_front,17.17,8.25,10.08,19,0.0,0.01
+5,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image5.jpg,Sample_Image5_front,15.65,9.93,9.68,22,0.0,0.01
+6,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image6.jpg,Sample_Image6_front,42.58,11.83,11.16,71,0.0,0.0
+7,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image7.jpg,Sample_Image7_front,10.57,8.14,5.7,38,0.14,1.34
+8,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image8.jpg,Sample_Image8_front,3.58,8.77,6.53,42,0.01,0.25
+9,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image9.jpg,Sample_Image9_front,7.11,8.75,8.27,74,0.26,3.71
+10,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image10.jpg,Sample_Image10_front,37.25,10.42,11.18,78,0.0,0.01
+11,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image11.jpg,Sample_Image11_front,17.57,6.58,6.49,20,0.0,0.0
+12,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image12.jpg,Sample_Image12_front,5.13,4.28,5.38,11,0.04,0.8
+13,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image13.jpg,Sample_Image13_front,10.6,7.43,7.05,66,0.18,1.73
+14,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image14.jpg,Sample_Image14_front,6.81,8.82,7.18,46,0.09,1.3
+15,Hartebeespoort Dam,2024-12-11,./assets/input/Sample_Image15.jpg,Sample_Image15_front,6.69,5.47,7.06,45,0.07,1.02
