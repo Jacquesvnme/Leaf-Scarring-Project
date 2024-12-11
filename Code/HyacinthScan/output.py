@@ -32,7 +32,7 @@ class OutputPage(QWidget):
         self.sample_label = QLabel(self)
         self.sample_label.setText("Samples:")
         self.sample_label.setAlignment(Qt.AlignLeft)
-        self.sample_label.setGeometry(20, 20, 500, 640)
+        self.sample_label.setGeometry(20, 20, 500, 300)
         self.sample_label.setStyleSheet("""
             QLabel {
                 background-color: qlineargradient(spread:pad, x1:0.474459, y1:1, x2:0.476, y2:0, stop:0 rgba(167, 210, 167, 230), stop:0.813312 rgba(255, 255, 255, 200));
@@ -49,7 +49,7 @@ class OutputPage(QWidget):
         """)
         
         self.image_preview_area = QListWidget(self)
-        self.image_preview_area.setGeometry(40, 60, 460, 580)
+        self.image_preview_area.setGeometry(40, 60, 460, 240)
         self.image_preview_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.image_preview_area.setSelectionMode(QListWidget.SingleSelection)
         self.image_preview_area.setStyleSheet("""
@@ -61,6 +61,42 @@ class OutputPage(QWidget):
         self.image_preview_area.itemClicked.connect(self.update_individual_stats)
         # Added change
         self.refresh_image_preview()
+        
+        # IMAGE PREVIEW SECTION
+        self.image_preview_label = QLabel(self)
+        self.image_preview_label.setText("Preview:")
+        self.image_preview_label.setAlignment(Qt.AlignLeft)
+        self.image_preview_label.setGeometry(20, 340, 500, 320)
+        self.image_preview_label.setStyleSheet("""
+            QLabel {
+                background-color: qlineargradient(spread:pad, x1:0.474459, y1:1, x2:0.476, y2:0, stop:0 rgba(167, 210, 167, 230), stop:0.813312 rgba(255, 255, 255, 200));
+                border-radius: 10px;                
+                border: 2px solid rgba(255, 255, 255, 0.4);
+                padding: 10px;
+                color: #000000;
+                font-family: 'Inter';
+                font-style: italic;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 36px;
+            }
+        """)
+        
+        # IMAGE PREVIEW
+        self.image_preview_image = QLabel(self)
+        image_path = './assets/images/placeholder.jpg'
+        pixmap = QPixmap(image_path)
+        self.image_preview_image.setGeometry(40, 380, 500, 250)
+        pixmap_resized = pixmap.scaled(200, 260, Qt.KeepAspectRatio)
+        self.image_preview_image.setPixmap(pixmap_resized)
+        
+        # IMAGE SCARRING PREVIEW
+        self.image_scarring_preview = QLabel(self)
+        image_path = './assets/images/placeholder.jpg'
+        pixmap2 = QPixmap(image_path)
+        self.image_scarring_preview.setGeometry(300, 380, 500, 250)
+        pixmap2_resized = pixmap2.scaled(200, 260, Qt.KeepAspectRatio)
+        self.image_scarring_preview.setPixmap(pixmap2_resized)
         
         #REMOVE SELECTED BUTTON
         self.remove_image_button = QPushButton('Remove Selected', self)
@@ -264,6 +300,18 @@ class OutputPage(QWidget):
         if selected_items:
             image_path = selected_items[0].text()
             path_id = DBObj.getPathID(image_path)
+
+            pixmap = QPixmap(image_path)
+            pixmap_resized = pixmap.scaled(200, 260, Qt.KeepAspectRatio)
+            self.image_preview_image.setPixmap(pixmap_resized)
+            
+            fileFirstCut = image_path.rfind("/") + 1
+            fileSecondCut = image_path.rfind(".")
+            captionName = image_path[fileFirstCut:fileSecondCut]
+            
+            pixmap2 = QPixmap(f"./assets/output/images/ContourScan_{captionName}.jpg")
+            pixmap2_resized = pixmap2.scaled(200, 260, Qt.KeepAspectRatio)
+            self.image_scarring_preview.setPixmap(pixmap2_resized)
             
             if path_id:
                 stats_data = DBObj.getIndividualStatsCollection(path_id[0][0])  #gets stats via dbhandler
